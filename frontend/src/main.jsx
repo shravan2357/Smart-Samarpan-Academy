@@ -6,9 +6,8 @@ import { CourseContextProvider } from "./context/CourseContext.jsx";
 import 'katex/dist/katex.min.css';
 import { GoogleOAuthProvider } from '@react-oauth/google'; // NEW: Import GoogleOAuthProvider
 
-// Use localhost for local development to avoid Render 500 errors/timeouts
-export const server = "http://localhost:5175";
-// export const server = "https://smart-samarpan-acadmey.onrender.com";
+// Configurable backend server URL via environment variable with localhost fallback
+export const server = import.meta.env.VITE_SERVER || "http://localhost:5175";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
