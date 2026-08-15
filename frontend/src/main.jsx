@@ -7,7 +7,7 @@ import 'katex/dist/katex.min.css';
 import { GoogleOAuthProvider } from '@react-oauth/google'; // NEW: Import GoogleOAuthProvider
 
 // Use localhost for local development to avoid Render 500 errors/timeouts
-export const server = "http://localhost:5001";
+export const server = "http://localhost:5175";
 // export const server = "https://smart-samarpan-acadmey.onrender.com";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

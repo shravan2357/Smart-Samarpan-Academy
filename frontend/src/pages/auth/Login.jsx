@@ -100,7 +100,6 @@ const Login = () => {
             <GoogleLogin
               onSuccess={googleSuccessHandler}
               onError={googleErrorHandler}
-              useOneTap // Optional: for a smoother one-tap experience
             />
           </div>
         </div>
