@@ -24,7 +24,15 @@ const EnrolledCourseCard = ({ course, index }) => {
     <div className="crs-card crs-in" style={{ transitionDelay: delay, opacity: 1, transform: 'none' }}>
       {/* Thumbnail */}
       <div className="crs-thumb-wrap">
-        <img src={`${server}/${course.image}`} alt={course.title} className="crs-thumb" />
+        <img 
+          src={course.image ? (course.image.startsWith("http") ? course.image : `${server}/${course.image}`) : "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80"} 
+          alt={course.title} 
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80";
+          }}
+          className="crs-thumb" 
+        />
         <div className="crs-thumb-overlay" onClick={handleStudy}>
           <div className="crs-play-btn"><FaPlay /></div>
         </div>

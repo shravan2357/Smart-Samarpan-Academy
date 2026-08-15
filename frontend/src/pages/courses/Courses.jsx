@@ -63,7 +63,15 @@ const CourseCard = ({ course, index }) => {
     <div className="crs-card" style={{ transitionDelay: delay }}>
       {/* Thumbnail */}
       <div className="crs-thumb-wrap">
-        <img src={`${server}/${course.image}`} alt={course.title} className="crs-thumb" />
+        <img 
+          src={course.image ? (course.image.startsWith("http") ? course.image : `${server}/${course.image}`) : "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80"} 
+          alt={course.title} 
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80";
+          }}
+          className="crs-thumb" 
+        />
         <div className="crs-thumb-overlay">
           <div className="crs-play-btn"><FaPlay /></div>
         </div>
@@ -149,7 +157,15 @@ const ListCard = ({ course, index }) => {
   return (
     <div className="crs-list-card" style={{ transitionDelay: delay }}>
       <div className="crs-list-thumb-wrap">
-        <img src={`${server}/${course.image}`} alt={course.title} className="crs-list-thumb" />
+        <img 
+          src={course.image ? (course.image.startsWith("http") ? course.image : `${server}/${course.image}`) : "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80"} 
+          alt={course.title} 
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80";
+          }}
+          className="crs-list-thumb" 
+        />
       </div>
       <div className="crs-list-body">
         <div>

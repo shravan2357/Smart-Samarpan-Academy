@@ -91,8 +91,12 @@ const CourseDescription = ({ user }) => {
                   {/* Course Details Section */}
                   <div className="bg-white p-8 rounded-xl shadow-lg">
                     <img
-                      src={`${server}/${course.image}`}
+                      src={course.image ? (course.image.startsWith("http") ? course.image : `${server}/${course.image}`) : "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80"}
                       alt={course.title}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80";
+                      }}
                       className="w-full h-80 object-cover rounded-xl mb-6 shadow-md"
                     />
                     <div className="space-y-4">
