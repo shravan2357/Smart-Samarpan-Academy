@@ -34,14 +34,14 @@ export const addLectures = TryCatch(async (req, res) => {
       message: "No Course with this id",
     });
 
-  const { title, description } = req.body;
+  const { title, description, videoUrl } = req.body;
 
   const file = req.file;
 
   const lecture = await Lecture.create({
     title,
     description,
-    video: file?.path,
+    video: file?.path || videoUrl || "",
     course: course._id,
   });
 
@@ -54,9 +54,11 @@ export const addLectures = TryCatch(async (req, res) => {
 export const deleteLecture = TryCatch(async (req, res) => {
   const lecture = await Lecture.findById(req.params.id);
 
-  rm(lecture.video, () => {
-    console.log("Video deleted");
-  });
+  if (lecture?.video && !lecture.video.startsWith("http")) {
+    rm(lecture.video, () => {
+      console.log("Video deleted");
+    });
+  }
 
   await lecture.deleteOne();
 
@@ -72,8 +74,14 @@ export const deleteCourse = TryCatch(async (req, res) => {
 
   await Promise.all(
     lectures.map(async (lecture) => {
-      await unlinkAsync(lecture.video);
-      console.log("video deleted");
+      if (lecture?.video && !lecture.video.startsWith("http")) {
+        try {
+          await unlinkAsync(lecture.video);
+          console.log("video deleted");
+        } catch (err) {
+          console.log("file deletion skip");
+        }
+      }
     })
   );
 

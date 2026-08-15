@@ -19,8 +19,27 @@ const Lecture = ({ user }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [video, setvideo] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
   const [videoPrev, setVideoPrev] = useState("");
   const [btnLoading, setBtnLoading] = useState(false);
+
+  const isYouTubeUrl = (url) => {
+    if (!url) return false;
+    return url.includes("youtube.com") || url.includes("youtu.be");
+  };
+
+  const getYouTubeEmbedUrl = (url) => {
+    if (!url) return "";
+    if (url.includes("embed/")) return url;
+    
+    let videoId = "";
+    if (url.includes("youtu.be/")) {
+      videoId = url.split("youtu.be/")[1]?.split("?")[0];
+    } else if (url.includes("watch?v=")) {
+      videoId = url.split("watch?v=")[1]?.split("&")[0];
+    }
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+  };
 
   if (user && user.role !== "admin" && !user.subscription.includes(params.id))
     return navigate("/");
@@ -72,7 +91,12 @@ const Lecture = ({ user }) => {
     const myForm = new FormData();
     myForm.append("title", title);
     myForm.append("description", description);
-    myForm.append("file", video);
+    if (video) {
+      myForm.append("file", video);
+    }
+    if (videoUrl) {
+      myForm.append("videoUrl", videoUrl);
+    }
 
     try {
       const { data } = await axios.post(
@@ -92,8 +116,9 @@ const Lecture = ({ user }) => {
       setDescription("");
       setvideo("");
       setVideoPrev("");
+      setVideoUrl("");
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Error adding lecture");
       setBtnLoading(false);
     }
   };
@@ -195,16 +220,26 @@ const Lecture = ({ user }) => {
                     {lecture.video ? (
                       <>
                         <div className="relative pt-[56.25%]"> {/* 16:9 aspect ratio */}
-                          <video
-                            src={`${server}/${lecture.video}`}
-                            className="absolute top-0 left-0 w-full h-full rounded-xl"
-                            controls
-                            controlsList="nodownload noremoteplayback"
-                            disablePictureInPicture
-                            disableRemotePlayback
-                            autoPlay
-                            onEnded={() => addProgress(lecture._id)}
-                          ></video>
+                          {isYouTubeUrl(lecture.video) ? (
+                            <iframe
+                              src={getYouTubeEmbedUrl(lecture.video)}
+                              title={lecture.title}
+                              className="absolute top-0 left-0 w-full h-full rounded-xl"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            ></iframe>
+                          ) : (
+                            <video
+                              src={lecture.video.startsWith("http") ? lecture.video : `${server}/${lecture.video}`}
+                              className="absolute top-0 left-0 w-full h-full rounded-xl"
+                              controls
+                              controlsList="nodownload noremoteplayback"
+                              disablePictureInPicture
+                              disableRemotePlayback
+                              autoPlay
+                              onEnded={() => addProgress(lecture._id)}
+                            ></video>
+                          )}
                         </div>
                         <div className="mt-6 space-y-2">
                           <h1 className="text-3xl font-bold text-gray-800">{lecture.title}</h1>
@@ -247,8 +282,13 @@ const Lecture = ({ user }) => {
                         <input type="text" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required className="w-full border border-gray-300 rounded-md p-2 focus:ring-purple-500 focus:border-purple-500"/>
                       </div>
                       <div>
-                        <label htmlFor="video-file" className="block text-sm font-medium text-gray-700 mb-1">Video File</label>
-                        <input type="file" id="video-file" accept="video/*" onChange={changeVideoHandler} required className="w-full border border-gray-300 rounded-md p-2"/>
+                        <label htmlFor="video-file" className="block text-sm font-medium text-gray-700 mb-1">Option A: Upload Video File (.mp4)</label>
+                        <input type="file" id="video-file" accept="video/*" onChange={changeVideoHandler} className="w-full border border-gray-300 rounded-md p-2"/>
+                      </div>
+                      <div className="text-center font-bold text-gray-400 text-xs my-1">OR</div>
+                      <div>
+                        <label htmlFor="video-url" className="block text-sm font-medium text-gray-700 mb-1">Option B: YouTube / Video Link</label>
+                        <input type="url" id="video-url" placeholder="https://www.youtube.com/watch?v=..." value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} className="w-full border border-gray-300 rounded-md p-2 focus:ring-purple-500 focus:border-purple-500"/>
                       </div>
                       {videoPrev && (
                         <video src={videoPrev} className="w-full rounded-md" controls></video>
