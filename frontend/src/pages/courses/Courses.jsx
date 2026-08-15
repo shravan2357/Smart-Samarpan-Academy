@@ -13,6 +13,7 @@ import {
   FaThLarge, FaList, FaUsers, FaCalculator,
   FaSquareRootAlt, FaChartBar, FaInfinity,
 } from "react-icons/fa";
+import { getCourseThumbnail } from "../../utils/getCourseThumbnail";
 
 /* ── reveal hook ─────────────────────────────────────────── */
 function useReveal(selector) {
@@ -64,12 +65,8 @@ const CourseCard = ({ course, index }) => {
       {/* Thumbnail */}
       <div className="crs-thumb-wrap">
         <img 
-          src={course.image ? (course.image.startsWith("http") ? course.image : `${server}/${course.image}`) : "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80"} 
+          src={getCourseThumbnail(course, server)} 
           alt={course.title} 
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80";
-          }}
           className="crs-thumb" 
         />
         <div className="crs-thumb-overlay">
@@ -158,12 +155,8 @@ const ListCard = ({ course, index }) => {
     <div className="crs-list-card" style={{ transitionDelay: delay }}>
       <div className="crs-list-thumb-wrap">
         <img 
-          src={course.image ? (course.image.startsWith("http") ? course.image : `${server}/${course.image}`) : "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80"} 
+          src={getCourseThumbnail(course, server)} 
           alt={course.title} 
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80";
-          }}
           className="crs-list-thumb" 
         />
       </div>

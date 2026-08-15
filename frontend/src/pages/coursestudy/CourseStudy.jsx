@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-// import "./coursestudy.css"; // REMOVE THIS LINE
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { CourseData } from "../../context/CourseContext";
 import { server } from "../../main";
 import Loading from "../../components/loading/Loading";
+import { getCourseThumbnail } from "../../utils/getCourseThumbnail";
 
 const CourseStudy = ({ user }) => {
   const params = useParams();
@@ -32,12 +32,8 @@ const CourseStudy = ({ user }) => {
             </h1>
 
             <img
-              src={course.image ? (course.image.startsWith("http") ? course.image : `${server}/${course.image}`) : "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80"}
+              src={getCourseThumbnail(course, server)}
               alt={course.title}
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80";
-              }}
               className="w-full max-w-4xl h-auto rounded-xl shadow-lg mx-auto mb-8"
             />
 

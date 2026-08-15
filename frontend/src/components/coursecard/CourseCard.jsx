@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { CourseData } from "../../context/CourseContext";
+import { getCourseThumbnail } from "../../utils/getCourseThumbnail";
 
 // Receive a new prop 'h_full'
 const CourseCard = ({ course, h_full }) => {
@@ -34,12 +35,8 @@ const CourseCard = ({ course, h_full }) => {
     // Add h-full to make the card fill the grid cell
     <div className={`bg-white rounded-xl shadow-lg p-6 flex flex-col transition-transform duration-300 hover:scale-105 ${h_full ? 'h-full' : ''}`}>
       <img 
-        src={course.image ? (course.image.startsWith("http") ? course.image : `${server}/${course.image}`) : "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80"} 
+        src={getCourseThumbnail(course, server)} 
         alt={course.title} 
-        onError={(e) => {
-          e.target.onerror = null;
-          e.target.src = "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80";
-        }}
         className="w-full h-40 object-cover rounded-t-lg mb-4" 
       />
       

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import "./coursedescription.css"; // REMOVE THIS LINE
 import { useNavigate, useParams } from "react-router-dom";
 import { CourseData } from "../../context/CourseContext";
 import { server } from "../../main";
@@ -7,6 +6,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { UserData } from "../../context/UserContext";
 import Loading from "../../components/loading/Loading";
+import { getCourseThumbnail } from "../../utils/getCourseThumbnail";
 
 const CourseDescription = ({ user }) => {
   const params = useParams();
@@ -91,12 +91,8 @@ const CourseDescription = ({ user }) => {
                   {/* Course Details Section */}
                   <div className="bg-white p-8 rounded-xl shadow-lg">
                     <img
-                      src={course.image ? (course.image.startsWith("http") ? course.image : `${server}/${course.image}`) : "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80"}
+                      src={getCourseThumbnail(course, server)}
                       alt={course.title}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80";
-                      }}
                       className="w-full h-80 object-cover rounded-xl mb-6 shadow-md"
                     />
                     <div className="space-y-4">

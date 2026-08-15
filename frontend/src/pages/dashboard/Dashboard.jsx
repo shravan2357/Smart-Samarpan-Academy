@@ -6,6 +6,7 @@ import Loading from "../../components/loading/Loading";
 import { server } from "../../main";
 import { FaPlay, FaClock, FaStar, FaArrowRight } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { getCourseThumbnail } from "../../utils/getCourseThumbnail";
 
 import "./Dashboard.css";
 import "../courses/Courses.css"; // Reuse the premium card styling
@@ -25,12 +26,8 @@ const EnrolledCourseCard = ({ course, index }) => {
       {/* Thumbnail */}
       <div className="crs-thumb-wrap">
         <img 
-          src={course.image ? (course.image.startsWith("http") ? course.image : `${server}/${course.image}`) : "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80"} 
+          src={getCourseThumbnail(course, server)} 
           alt={course.title} 
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80";
-          }}
           className="crs-thumb" 
         />
         <div className="crs-thumb-overlay" onClick={handleStudy}>
