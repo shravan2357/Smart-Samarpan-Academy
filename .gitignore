@@ -35,3 +35,9 @@ yarn-error.log*
 # Server uploaded user media
 server/uploads/*
 !server/uploads/.gitkeep
+
+# Documentation & PDF guides
+*.pdf
+master_guide.html
+master_guide.pdf
+
