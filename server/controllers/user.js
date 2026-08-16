@@ -51,6 +51,52 @@ export const verifyUser = TryCatch(async (req, res) => {
   res.json({ message: "User Registered" });
 });
 
+export const resendOtp = TryCatch(async (req, res) => {
+  const { activationToken } = req.body;
+
+  if (!activationToken) {
+    return res.status(400).json({ message: "Session expired, please register again." });
+  }
+
+  let verify;
+  try {
+    verify = jwt.verify(activationToken, process.env.Activation_Secret, { ignoreExpiration: true });
+  } catch (error) {
+    return res.status(400).json({ message: "Invalid session, please register again." });
+  }
+
+  const user = verify.user;
+  if (!user || !user.email) {
+    return res.status(400).json({ message: "User data not found, please register again." });
+  }
+
+  // Check if user already got created in meantime
+  const exists = await User.findOne({ email: user.email });
+  if (exists) {
+    return res.status(400).json({ message: "User already registered. Please login." });
+  }
+
+  const otp = Math.floor(Math.random() * 1000000);
+  const newActivationToken = jwt.sign({ user, otp }, process.env.Activation_Secret, { expiresIn: "5m" });
+  const data = { name: user.name, otp };
+
+  try {
+    await sendMail(user.email, "Samarpan Math Academy - Resent Verification OTP", data);
+    res.status(200).json({
+      message: "New OTP sent to your email! (Check Spam folder if not in Inbox)",
+      activationToken: newActivationToken,
+    });
+  } catch (error) {
+    console.error("Error resending OTP email:", error.message);
+    console.log(`[RENDER / CLOUD SMTP NOTICE] Resent OTP for ${user.email} is ${otp}`);
+    return res.status(200).json({
+      message: "New OTP generated!",
+      activationToken: newActivationToken,
+      fallbackOtp: otp,
+    });
+  }
+});
+
 export const loginUser = TryCatch(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });

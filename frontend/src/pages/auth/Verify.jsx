@@ -3,15 +3,20 @@ import "./auth.css";
 import { Link, useNavigate } from "react-router-dom";
 import { UserData } from "../../context/UserContext";
 
+const RESEND_COOLDOWN = 30; // 30 seconds timer
+
 const Verify = () => {
   const [otp, setOtp] = useState("");
   const [email, setEmail] = useState("");
   const [fallbackOtp, setFallbackOtp] = useState("");
-  const { btnLoading, verifyOtp } = UserData();
+  const [timer, setTimer] = useState(RESEND_COOLDOWN);
+  const [canResend, setCanResend] = useState(false);
+
+  const { btnLoading, verifyOtp, resendOtp } = UserData();
   const navigate = useNavigate();
 
+  // Load email and initial fallback
   useEffect(() => {
-    // 1. Get email
     const storedEmail = localStorage.getItem("userEmail");
     if (storedEmail) {
       setEmail(storedEmail);
@@ -29,13 +34,38 @@ const Verify = () => {
       }
     }
 
-    // 2. Check for fallback OTP (when cloud provider blocks SMTP)
     const fb = localStorage.getItem("fallbackOtp");
     if (fb) {
       setFallbackOtp(fb);
-      setOtp(fb); // auto-fill for frictionless testing
+      setOtp(fb);
     }
   }, []);
+
+  // Countdown timer for Resend OTP
+  useEffect(() => {
+    if (timer > 0) {
+      setCanResend(false);
+      const interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    } else {
+      setCanResend(true);
+    }
+  }, [timer]);
+
+  const handleResend = async () => {
+    if (!canResend || btnLoading) return;
+    const res = await resendOtp();
+    if (res) {
+      setTimer(RESEND_COOLDOWN);
+      setCanResend(false);
+      if (res.fallbackOtp) {
+        setFallbackOtp(String(res.fallbackOtp));
+        setOtp(String(res.fallbackOtp));
+      }
+    }
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -96,7 +126,38 @@ const Verify = () => {
             {btnLoading ? "Please Wait..." : "Verify OTP"}
           </button>
         </form>
-        <p>
+
+        {/* Resend OTP Section */}
+        <div style={{ marginTop: '16px', textAlign: 'center' }}>
+          <p style={{ margin: 0, fontSize: '13px', color: '#666' }}>
+            Didn't receive the code?{" "}
+            {canResend ? (
+              <button
+                type="button"
+                onClick={handleResend}
+                disabled={btnLoading}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#007bff',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  padding: 0,
+                  textDecoration: 'underline',
+                  fontSize: '13px'
+                }}
+              >
+                Resend OTP
+              </button>
+            ) : (
+              <span style={{ color: '#888', fontWeight: 600 }}>
+                Resend in {timer}s
+              </span>
+            )}
+          </p>
+        </div>
+
+        <p style={{ marginTop: '20px' }}>
           Go to <Link to="/login">Login</Link> page
         </p>
       </div>

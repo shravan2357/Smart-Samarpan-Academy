@@ -90,6 +90,36 @@ export const UserContextProvider = ({ children }) => {
     }
   }
 
+  async function resendOtp() {
+    setBtnLoading(true);
+    const activationToken = localStorage.getItem("activationToken");
+    if (!activationToken) {
+      toast.error("Verification session expired. Please register again.");
+      setBtnLoading(false);
+      return null;
+    }
+    try {
+      const { data } = await axios.post(`${server}/api/user/resend-otp`, {
+        activationToken,
+      });
+
+      toast.success(data.message, { duration: 5000 });
+      localStorage.setItem("activationToken", data.activationToken);
+      if (data.fallbackOtp) {
+        localStorage.setItem("fallbackOtp", String(data.fallbackOtp));
+      } else {
+        localStorage.removeItem("fallbackOtp");
+      }
+      setBtnLoading(false);
+      return data;
+    } catch (error) {
+      console.error("Resend OTP Error:", error.response?.data?.message || error.message);
+      toast.error(error.response?.data?.message || "Failed to resend OTP.");
+      setBtnLoading(false);
+      return null;
+    }
+  }
+
   async function fetchUser() {
     setLoading(true); // Indicate loading for user data
     try {
@@ -139,6 +169,7 @@ export const UserContextProvider = ({ children }) => {
         loading,
         registerUser,
         verifyOtp,
+        resendOtp,
         fetchUser, // Expose fetchUser
       }}
     >

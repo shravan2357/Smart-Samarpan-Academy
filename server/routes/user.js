@@ -7,6 +7,7 @@ import {
   register,
   resetPassword,
   verifyUser,
+  resendOtp,
   googleLogin, // NEW: Import googleLogin controller
 } from "../controllers/user.js";
 import { isAuth } from "../middlewares/isAuth.js";
@@ -17,6 +18,7 @@ const router = express.Router();
 // Auth and User Routes
 router.post("/user/register", register);
 router.post("/user/verify", verifyUser);
+router.post("/user/resend-otp", resendOtp);
 router.post("/user/login", loginUser);
 router.get("/user/me", isAuth, myProfile);
 
