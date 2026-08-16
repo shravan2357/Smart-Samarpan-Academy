@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { CourseData } from "../../context/CourseContext";
-import { getCourseThumbnail } from "../../utils/getCourseThumbnail";
+import CourseThumbnail from "../coursethumbnail/CourseThumbnail";
 
 // Receive a new prop 'h_full'
 const CourseCard = ({ course, h_full }) => {
@@ -34,10 +34,9 @@ const CourseCard = ({ course, h_full }) => {
   return (
     // Add h-full to make the card fill the grid cell
     <div className={`bg-white rounded-xl shadow-lg p-6 flex flex-col transition-transform duration-300 hover:scale-105 ${h_full ? 'h-full' : ''}`}>
-      <img 
-        src={getCourseThumbnail(course, server)} 
-        alt={course.title} 
-        className="w-full h-40 object-cover rounded-t-lg mb-4" 
+      <CourseThumbnail
+        course={course}
+        className="w-full h-40 object-contain bg-gray-900 rounded-t-lg mb-4"
       />
       
       {/* This flex-grow div is the key to aligning content consistently */}

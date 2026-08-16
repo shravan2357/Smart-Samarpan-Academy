@@ -6,7 +6,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { UserData } from "../../context/UserContext";
 import Loading from "../../components/loading/Loading";
-import { getCourseThumbnail } from "../../utils/getCourseThumbnail";
+import CourseThumbnail from "../../components/coursethumbnail/CourseThumbnail";
 
 const CourseDescription = ({ user }) => {
   const params = useParams();
@@ -90,10 +90,9 @@ const CourseDescription = ({ user }) => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
                   {/* Course Details Section */}
                   <div className="bg-white p-8 rounded-xl shadow-lg">
-                    <img
-                      src={getCourseThumbnail(course, server)}
-                      alt={course.title}
-                      className="w-full h-80 object-cover rounded-xl mb-6 shadow-md"
+                    <CourseThumbnail
+                      course={course}
+                      className="w-full h-80 object-contain bg-gray-900 rounded-xl mb-6 shadow-md"
                     />
                     <div className="space-y-4">
                       <h1 className="text-4xl font-extrabold text-gray-900 leading-tight">{course.title}</h1>

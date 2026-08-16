@@ -188,20 +188,14 @@ const AddCourse = ({ user }) => {
               <input 
                 type="file" 
                 id="image" 
-                required 
                 onChange={changeImageHandler} 
                 className="adm-input"
                 style={{ padding: '10px' }}
+                accept="image/*"
               />
             </div>
           </div>
 
-          {imagePrev && (
-            <div className="mt-4">
-              <p className="adm-label">Thumbnail Preview</p>
-              <img src={imagePrev} alt="Course Preview" className="rounded-xl w-full h-48 object-cover border border-white/10" />
-            </div>
-          )}
 
           <button
             type="submit"

@@ -343,7 +343,8 @@
   position: relative; height: 175px; overflow: hidden; flex-shrink: 0;
 }
 .crs-thumb {
-  width:100%; height:100%; object-fit:cover;
+  width:100%; height:100%; object-fit:contain;
+  background: #0f0e1a;
   transition: transform 0.55s cubic-bezier(0.22,1,0.36,1);
 }
 .crs-card:hover .crs-thumb { transform: scale(1.1); }

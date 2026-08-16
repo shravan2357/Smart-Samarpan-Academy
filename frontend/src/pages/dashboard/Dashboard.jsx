@@ -6,7 +6,7 @@ import Loading from "../../components/loading/Loading";
 import { server } from "../../main";
 import { FaPlay, FaClock, FaStar, FaArrowRight } from "react-icons/fa";
 import toast from "react-hot-toast";
-import { getCourseThumbnail } from "../../utils/getCourseThumbnail";
+import CourseThumbnail from "../../components/coursethumbnail/CourseThumbnail";
 
 import "./Dashboard.css";
 import "../courses/Courses.css"; // Reuse the premium card styling
@@ -25,10 +25,9 @@ const EnrolledCourseCard = ({ course, index }) => {
     <div className="crs-card crs-in" style={{ transitionDelay: delay, opacity: 1, transform: 'none' }}>
       {/* Thumbnail */}
       <div className="crs-thumb-wrap">
-        <img 
-          src={getCourseThumbnail(course, server)} 
-          alt={course.title} 
-          className="crs-thumb" 
+        <CourseThumbnail
+          course={course}
+          className="crs-thumb"
         />
         <div className="crs-thumb-overlay" onClick={handleStudy}>
           <div className="crs-play-btn"><FaPlay /></div>

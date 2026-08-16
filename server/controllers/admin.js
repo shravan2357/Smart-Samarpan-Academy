@@ -16,7 +16,7 @@ export const createCourse = TryCatch(async (req, res) => {
     description,
     category,
     createdBy,
-    image: image?.path,
+    image: image?.path || "",
     duration,
     price,
   });

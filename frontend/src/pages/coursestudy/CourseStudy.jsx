@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { CourseData } from "../../context/CourseContext";
 import { server } from "../../main";
 import Loading from "../../components/loading/Loading";
-import { getCourseThumbnail } from "../../utils/getCourseThumbnail";
+import CourseThumbnail from "../../components/coursethumbnail/CourseThumbnail";
 
 const CourseStudy = ({ user }) => {
   const params = useParams();
@@ -31,10 +31,10 @@ const CourseStudy = ({ user }) => {
               {course.title}
             </h1>
 
-            <img
-              src={getCourseThumbnail(course, server)}
-              alt={course.title}
-              className="w-full max-w-4xl h-auto rounded-xl shadow-lg mx-auto mb-8"
+            <CourseThumbnail
+              course={course}
+              className="w-full max-w-4xl rounded-xl shadow-lg mx-auto mb-8"
+              style={{ minHeight: '280px' }}
             />
 
             <div className="max-w-3xl mx-auto space-y-4">

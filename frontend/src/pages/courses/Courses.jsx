@@ -13,7 +13,7 @@ import {
   FaThLarge, FaList, FaUsers, FaCalculator,
   FaSquareRootAlt, FaChartBar, FaInfinity,
 } from "react-icons/fa";
-import { getCourseThumbnail } from "../../utils/getCourseThumbnail";
+import CourseThumbnail from "../../components/coursethumbnail/CourseThumbnail";
 
 /* ── reveal hook ─────────────────────────────────────────── */
 function useReveal(selector) {
@@ -64,10 +64,9 @@ const CourseCard = ({ course, index }) => {
     <div className="crs-card" style={{ transitionDelay: delay }}>
       {/* Thumbnail */}
       <div className="crs-thumb-wrap">
-        <img 
-          src={getCourseThumbnail(course, server)} 
-          alt={course.title} 
-          className="crs-thumb" 
+        <CourseThumbnail
+          course={course}
+          className="crs-thumb"
         />
         <div className="crs-thumb-overlay">
           <div className="crs-play-btn"><FaPlay /></div>
@@ -154,10 +153,9 @@ const ListCard = ({ course, index }) => {
   return (
     <div className="crs-list-card" style={{ transitionDelay: delay }}>
       <div className="crs-list-thumb-wrap">
-        <img 
-          src={getCourseThumbnail(course, server)} 
-          alt={course.title} 
-          className="crs-list-thumb" 
+        <CourseThumbnail
+          course={course}
+          className="crs-list-thumb"
         />
       </div>
       <div className="crs-list-body">
