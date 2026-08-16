@@ -46,6 +46,7 @@ export const UserContextProvider = ({ children }) => {
 
       toast.success(data.message);
       localStorage.setItem("activationToken", data.activationToken);
+      localStorage.setItem("userEmail", email);
       setBtnLoading(false);
       navigate("/verify");
     } catch (error) {
@@ -73,6 +74,7 @@ export const UserContextProvider = ({ children }) => {
 
       toast.success(data.message);
       localStorage.removeItem("activationToken");
+      localStorage.removeItem("userEmail");
       setBtnLoading(false);
       navigate("/login");
     } catch (error) {
