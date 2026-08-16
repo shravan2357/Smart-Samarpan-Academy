@@ -26,7 +26,7 @@ const app = express();
     const allowedOrigins = [
       "http://localhost:5173", // For local development
       process.env.frontendurl, // Your deployed Vercel frontend URL (will be set in Render env vars)
-      "https://samarpan-guzg.onrender.com", // REPLACE WITH ACTUAL RENDER URL
+      "https://smart-samarpan-academy.onrender.com", // Live Render backend URL
       // Add any other specific origins if you have them
     ];
 
@@ -46,8 +46,8 @@ const app = express();
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     const fetchWithRetry = async (url, options, retries = 3, backoffMs = 2000) => {
       const response = await fetch(url, options);
-      if (response.status === 429 && retries > 0) {
-        console.warn(`API Rate limit hit. Retrying in ${backoffMs}ms... (${retries} retries left)`);
+      if ((response.status === 429 || response.status === 503) && retries > 0) {
+        console.warn(`API Rate limit / Service Unavailable (${response.status}) hit. Retrying in ${backoffMs}ms... (${retries} retries left)`);
         await sleep(backoffMs);
         return fetchWithRetry(url, options, retries - 1, backoffMs * 2);
       }
@@ -96,7 +96,7 @@ const app = express();
       if (!apiKey) {
         return res.status(500).json({ success: false, message: "AI service not configured. Please set GEMINI_API_KEY on the server." });
       }
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
       try {
         const response = await fetchWithRetry(apiUrl, {
           method: "POST",
@@ -184,7 +184,7 @@ const app = express();
       if (!apiKey) {
         return res.status(500).json({ success: false, message: "AI service not configured. Please set GEMINI_API_KEY on the server." });
       }
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
       try {
         const response = await fetchWithRetry(apiUrl, {
           method: "POST",

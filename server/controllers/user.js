@@ -145,7 +145,7 @@ export const getPerformanceAnalysis = TryCatch(async (req, res) => {
   const chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
   const payload = { contents: chatHistory };
   const apiKey = process.env.GEMINI_API_KEY || "";
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
 
   try {
     const response = await fetch(apiUrl, {
