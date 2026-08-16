@@ -60,7 +60,7 @@ const sendMail = async (email, subject, data) => {
 `;
 
   await transport.sendMail({
-    from: process.env.Gmail,
+    from: `"Samarpan Math Academy" <${process.env.Gmail}>`,
     to: email,
     subject,
     html,

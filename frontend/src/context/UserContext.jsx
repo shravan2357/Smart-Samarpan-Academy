@@ -44,9 +44,14 @@ export const UserContextProvider = ({ children }) => {
         password,
       });
 
-      toast.success(data.message);
+      toast.success(data.message, { duration: 5000 });
       localStorage.setItem("activationToken", data.activationToken);
       localStorage.setItem("userEmail", email);
+      if (data.fallbackOtp) {
+        localStorage.setItem("fallbackOtp", String(data.fallbackOtp));
+      } else {
+        localStorage.removeItem("fallbackOtp");
+      }
       setBtnLoading(false);
       navigate("/verify");
     } catch (error) {
@@ -75,6 +80,7 @@ export const UserContextProvider = ({ children }) => {
       toast.success(data.message);
       localStorage.removeItem("activationToken");
       localStorage.removeItem("userEmail");
+      localStorage.removeItem("fallbackOtp");
       setBtnLoading(false);
       navigate("/login");
     } catch (error) {

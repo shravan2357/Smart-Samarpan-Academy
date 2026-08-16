@@ -21,15 +21,16 @@ export const register = TryCatch(async (req, res) => {
   const activationToken = jwt.sign({ user, otp }, process.env.Activation_Secret, { expiresIn: "5m" });
   const data = { name, otp };
   try {
-    await sendMail(email, "Samarpan Math Academy", data);
-    res.status(200).json({ message: "Otp send to your mail", activationToken });
+    await sendMail(email, "Samarpan Math Academy - Account Verification OTP", data);
+    res.status(200).json({ message: "OTP sent to your email! (Check Spam folder if not in Inbox)", activationToken });
   } catch (error) {
     console.error("Error sending OTP email:", error.message);
-    console.log(`[TESTING ON RENDER] OTP for ${email} is ${otp}`);
-    // Return 200 instead of 500 so frontend proceeds to OTP screen
+    console.log(`[RENDER / CLOUD SMTP NOTICE] OTP for ${email} is ${otp}`);
+    // If cloud host blocks SMTP port, pass fallbackOtp so registration never gets blocked
     return res.status(200).json({ 
-      message: "Render blocked email. Check backend console for OTP to proceed.",
-      activationToken
+      message: "OTP generated! (Cloud SMTP blocked outbound mail)",
+      activationToken,
+      fallbackOtp: otp
     });
   }
 });
