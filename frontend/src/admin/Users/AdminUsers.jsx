@@ -72,10 +72,20 @@ const AdminUsers = ({ user }) => {
     }
   };
 
-  const deleteUser = (id) => {
-    // Optional placeholder for future backend deletion logic
+  const deleteUser = async (id) => {
     if (confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
-      toast.error("User deletion API endpoint is not yet implemented.");
+      try {
+        const { data } = await axios.delete(`${server}/api/user/${id}`, {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        });
+
+        toast.success(data.message);
+        fetchUsers();
+      } catch (error) {
+        toast.error(error.response?.data?.message || "Failed to delete user");
+      }
     }
   };
 

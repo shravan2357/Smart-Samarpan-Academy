@@ -5,6 +5,8 @@ import { rm } from "fs";
 import { promisify } from "util";
 import fs from "fs";
 import { User } from "../models/User.js";
+import { Progress } from "../models/Progress.js";
+import { QuizResult } from "../models/QuizResult.js";
 
 export const createCourse = TryCatch(async (req, res) => {
   const { title, description, category, createdBy, duration, price } = req.body;
@@ -148,4 +150,36 @@ export const updateRole = TryCatch(async (req, res) => {
       message: "Role updated",
     });
   }
+});
+
+export const deleteUser = TryCatch(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return res.status(404).json({
+      message: "No user found with this id",
+    });
+  }
+
+  if (user._id.toString() === req.user._id.toString()) {
+    return res.status(400).json({
+      message: "You cannot delete your own account from here",
+    });
+  }
+
+  if (user.mainrole === "superadmin" || user.role === "superadmin") {
+    return res.status(403).json({
+      message: "Superadmin account cannot be deleted",
+    });
+  }
+
+  // Cleanup associated user data
+  await Progress.deleteMany({ user: user._id });
+  await QuizResult.deleteMany({ user: user._id });
+
+  await user.deleteOne();
+
+  res.json({
+    message: "User deleted successfully",
+  });
 });

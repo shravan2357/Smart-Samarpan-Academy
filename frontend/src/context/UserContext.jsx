@@ -59,6 +59,12 @@ export const UserContextProvider = ({ children }) => {
   async function verifyOtp(otp, navigate) {
     setBtnLoading(true);
     const activationToken = localStorage.getItem("activationToken");
+    if (!activationToken) {
+      toast.error("Verification session expired. Please register again.");
+      setBtnLoading(false);
+      navigate("/register");
+      return;
+    }
     try {
       const { data } = await axios.post(`${server}/api/user/verify`, {
         otp,
@@ -66,11 +72,10 @@ export const UserContextProvider = ({ children }) => {
       });
 
       toast.success(data.message);
-      navigate("/login");
-      localStorage.clear();
+      localStorage.removeItem("activationToken");
       setBtnLoading(false);
+      navigate("/login");
     } catch (error) {
-      // Improved error logging for verify OTP
       console.error("Verify OTP Error:", error.response?.data?.message || error.message);
       toast.error(error.response?.data?.message || "An error occurred during OTP verification.");
       setBtnLoading(false);
