@@ -3,19 +3,18 @@ import "./auth.css";
 import { Link, useNavigate } from "react-router-dom";
 import { UserData } from "../../context/UserContext";
 
-const RESEND_COOLDOWN = 30; // 30 seconds timer
+const RESEND_COOLDOWN = 30; // 30 seconds cooldown
 
 const Verify = () => {
   const [otp, setOtp] = useState("");
   const [email, setEmail] = useState("");
-  const [fallbackOtp, setFallbackOtp] = useState("");
   const [timer, setTimer] = useState(RESEND_COOLDOWN);
   const [canResend, setCanResend] = useState(false);
 
   const { btnLoading, verifyOtp, resendOtp } = UserData();
   const navigate = useNavigate();
 
-  // Load email and initial fallback
+  // Load recipient email
   useEffect(() => {
     const storedEmail = localStorage.getItem("userEmail");
     if (storedEmail) {
@@ -32,12 +31,6 @@ const Verify = () => {
           console.error("Error decoding token payload:", e);
         }
       }
-    }
-
-    const fb = localStorage.getItem("fallbackOtp");
-    if (fb) {
-      setFallbackOtp(fb);
-      setOtp(fb);
     }
   }, []);
 
@@ -60,10 +53,7 @@ const Verify = () => {
     if (res) {
       setTimer(RESEND_COOLDOWN);
       setCanResend(false);
-      if (res.fallbackOtp) {
-        setFallbackOtp(String(res.fallbackOtp));
-        setOtp(String(res.fallbackOtp));
-      }
+      setOtp(""); // keep input blank for manual entry
     }
   };
 
@@ -82,41 +72,26 @@ const Verify = () => {
           border: '1px solid #cce5ff',
           borderRadius: '8px',
           padding: '12px 16px',
-          marginBottom: '16px',
+          marginBottom: '18px',
           textAlign: 'center'
         }}>
           <p style={{ margin: 0, fontSize: '13px', color: '#495057' }}>
-            Verification code sent to:
+            Verification code sent to your email:
           </p>
-          <p style={{ margin: '3px 0 0 0', fontSize: '15px', fontWeight: 'bold', color: '#007bff' }}>
-            {email || "your email address"}
+          <p style={{ margin: '4px 0 0 0', fontSize: '15px', fontWeight: 'bold', color: '#007bff' }}>
+            {email || "your registered email"}
           </p>
-          <p style={{ margin: '6px 0 0 0', fontSize: '12px', color: '#dc3545', fontWeight: 500 }}>
-            ⚠️ Note: Please check your <strong>Spam / Junk</strong> folder if not in Inbox!
+          <p style={{ margin: '6px 0 0 0', fontSize: '12px', color: '#6c757d' }}>
+            📩 (Please check your <strong>Inbox</strong> or <strong>Spam/Junk</strong> folder)
           </p>
         </div>
-
-        {fallbackOtp && (
-          <div style={{
-            backgroundColor: '#fff3cd',
-            border: '1px solid #ffeeba',
-            borderRadius: '8px',
-            padding: '10px 14px',
-            marginBottom: '16px',
-            textAlign: 'center'
-          }}>
-            <p style={{ margin: 0, fontSize: '12px', color: '#856404' }}>
-              ⚡ <strong>Direct Code:</strong> <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}>{fallbackOtp}</span>
-            </p>
-          </div>
-        )}
 
         <form onSubmit={submitHandler}>
           <label htmlFor="otp">Enter 6-Digit OTP</label>
           <input
             type="number"
             id="otp"
-            placeholder="e.g. 123456"
+            placeholder="Enter OTP from email"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
             required
@@ -127,10 +102,10 @@ const Verify = () => {
           </button>
         </form>
 
-        {/* Resend OTP Section */}
+        {/* Resend OTP with Timer */}
         <div style={{ marginTop: '16px', textAlign: 'center' }}>
           <p style={{ margin: 0, fontSize: '13px', color: '#666' }}>
-            Didn't receive the code?{" "}
+            Didn't receive the email?{" "}
             {canResend ? (
               <button
                 type="button"

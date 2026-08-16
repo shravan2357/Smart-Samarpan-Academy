@@ -25,12 +25,8 @@ export const register = TryCatch(async (req, res) => {
     res.status(200).json({ message: "OTP sent to your email! (Check Spam folder if not in Inbox)", activationToken });
   } catch (error) {
     console.error("Error sending OTP email:", error.message);
-    console.log(`[RENDER / CLOUD SMTP NOTICE] OTP for ${email} is ${otp}`);
-    // If cloud host blocks SMTP port, pass fallbackOtp so registration never gets blocked
-    return res.status(200).json({ 
-      message: "OTP generated! (Cloud SMTP blocked outbound mail)",
-      activationToken,
-      fallbackOtp: otp
+    return res.status(500).json({
+      message: "Failed to send verification email. Please check your email address or try again.",
     });
   }
 });
@@ -88,11 +84,8 @@ export const resendOtp = TryCatch(async (req, res) => {
     });
   } catch (error) {
     console.error("Error resending OTP email:", error.message);
-    console.log(`[RENDER / CLOUD SMTP NOTICE] Resent OTP for ${user.email} is ${otp}`);
-    return res.status(200).json({
-      message: "New OTP generated!",
-      activationToken: newActivationToken,
-      fallbackOtp: otp,
+    return res.status(500).json({
+      message: "Failed to resend verification email. Please try again.",
     });
   }
 });
