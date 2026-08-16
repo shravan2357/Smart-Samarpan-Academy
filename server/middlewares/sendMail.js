@@ -7,9 +7,9 @@ const sendMail = async (email, subject, data) => {
       user: process.env.Gmail,
       pass: process.env.Password,
     },
-    connectionTimeout: 8000,
-    greetingTimeout: 8000,
-    socketTimeout: 8000,
+    connectionTimeout: 2500,
+    greetingTimeout: 2500,
+    socketTimeout: 2500,
   });
 
   const html = `<!DOCTYPE html>
