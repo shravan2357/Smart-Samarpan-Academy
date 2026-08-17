@@ -66,14 +66,13 @@ const sendMail = async (email, subject, data) => {
 
   // 2. Fallback: Nodemailer SMTP
   const transport = createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.Gmail,
       pass: process.env.Password,
     },
-    connectionTimeout: 3000,
-    greetingTimeout: 3000,
-    socketTimeout: 3000,
   });
 
   return await transport.sendMail({
@@ -135,14 +134,13 @@ export const sendForgotMail = async (subject, data) => {
   }
 
   const transport = createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.Gmail,
       pass: process.env.Password,
     },
-    connectionTimeout: 4000,
-    greetingTimeout: 4000,
-    socketTimeout: 4000,
   });
 
   return await transport.sendMail({

@@ -17,7 +17,8 @@ export const register = TryCatch(async (req, res) => {
   if (user) return res.status(400).json({ message: "User Already exists" });
   const hashPassword = await bcrypt.hash(password, 10);
   user = { name, email, password: hashPassword };
-  const otp = Math.floor(Math.random() * 1000000);
+  const otpNumber = Math.floor(100000 + Math.random() * 900000); // Always 6 digits (100000–999999)
+  const otp = String(otpNumber).padStart(6, "0");
   const activationToken = jwt.sign({ user, otp }, process.env.Activation_Secret, { expiresIn: "5m" });
   const data = { name, otp };
   try {
@@ -28,11 +29,8 @@ export const register = TryCatch(async (req, res) => {
     });
   } catch (error) {
     console.error("Error sending OTP email:", error.message);
-    console.log(`[VERIFICATION OTP for ${email}] ${otp}`);
-    // Return 200 so registration flow never crashes with 500
-    return res.status(200).json({ 
-      message: "OTP sent to your email! (Please check your Inbox or Spam folder)", 
-      activationToken 
+    return res.status(500).json({ 
+      message: "Failed to send OTP email. Please check your email address and try again."
     });
   }
 });
@@ -78,7 +76,8 @@ export const resendOtp = TryCatch(async (req, res) => {
     return res.status(400).json({ message: "User already registered. Please login." });
   }
 
-  const otp = Math.floor(Math.random() * 1000000);
+  const otpNumber = Math.floor(100000 + Math.random() * 900000); // Always 6 digits
+  const otp = String(otpNumber).padStart(6, "0");
   const newActivationToken = jwt.sign({ user, otp }, process.env.Activation_Secret, { expiresIn: "5m" });
   const data = { name: user.name, otp };
 
@@ -90,10 +89,8 @@ export const resendOtp = TryCatch(async (req, res) => {
     });
   } catch (error) {
     console.error("Error resending OTP email:", error.message);
-    console.log(`[RESENT OTP for ${user.email}] ${otp}`);
-    return res.status(200).json({
-      message: "New OTP sent to your email! (Please check your Inbox or Spam folder)",
-      activationToken: newActivationToken,
+    return res.status(500).json({
+      message: "Failed to resend OTP email. Please try again.",
     });
   }
 });
