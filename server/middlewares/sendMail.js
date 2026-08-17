@@ -1,6 +1,36 @@
 import { createTransport } from "nodemailer";
-import fetch from "node-fetch";
 
+// Helper: create the right transporter
+// Priority: 1. Brevo SMTP (works on Render) → 2. Gmail SMTP (local dev only)
+const createMailTransport = () => {
+  if (process.env.BREVO_USER && process.env.BREVO_PASS) {
+    // Brevo (Sendinblue) SMTP — works on Render free tier, no domain needed
+    return createTransport({
+      host: "smtp-relay.brevo.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.BREVO_USER,
+        pass: process.env.BREVO_PASS,
+      },
+    });
+  }
+
+  // Fallback: Gmail SMTP (local development only — blocked on Render)
+  return createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.Gmail,
+      pass: process.env.Password,
+    },
+  });
+};
+
+// =============================================
+// 1. OTP Email (Registration)
+// =============================================
 const sendMail = async (email, subject, data) => {
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -32,51 +62,13 @@ const sendMail = async (email, subject, data) => {
         </div>
     </div>
 </body>
-</html>
-`;
+</html>`;
 
-  // 1. If RESEND_API_KEY is available (Recommended for cloud hosting like Render/Vercel)
-  if (process.env.RESEND_API_KEY) {
-    try {
-      const fromEmail = process.env.RESEND_FROM || "Samarpan Academy <onboarding@resend.dev>";
-      const res = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: fromEmail,
-          to: [email],
-          subject,
-          html,
-        }),
-      });
-
-      const resData = await res.json();
-      if (res.ok) {
-        console.log("Email sent successfully via Resend HTTPS API:", resData);
-        return resData;
-      }
-      console.error("Resend API responded with error:", resData);
-    } catch (err) {
-      console.error("Resend HTTP API failed, falling back to SMTP:", err.message);
-    }
-  }
-
-  // 2. Fallback: Nodemailer SMTP
-  const transport = createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.Gmail,
-      pass: process.env.Password,
-    },
-  });
+  const transport = createMailTransport();
+  const fromEmail = process.env.BREVO_USER || process.env.Gmail;
 
   return await transport.sendMail({
-    from: `"Samarpan Math Academy" <${process.env.Gmail}>`,
+    from: `"Samarpan Math Academy" <${fromEmail}>`,
     to: email,
     subject,
     html,
@@ -85,6 +77,9 @@ const sendMail = async (email, subject, data) => {
 
 export default sendMail;
 
+// =============================================
+// 2. Forgot Password Email
+// =============================================
 export const sendForgotMail = async (subject, data) => {
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -108,43 +103,13 @@ export const sendForgotMail = async (subject, data) => {
     <p>If you didn't request this, you can safely ignore this email.</p>
   </div>
 </body>
-</html>
-`;
+</html>`;
 
-  if (process.env.RESEND_API_KEY) {
-    try {
-      const fromEmail = process.env.RESEND_FROM || "Samarpan Academy <onboarding@resend.dev>";
-      const res = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: fromEmail,
-          to: [data.email],
-          subject,
-          html,
-        }),
-      });
-      if (res.ok) return await res.json();
-    } catch (err) {
-      console.error("Resend forgot password email failed, falling back to SMTP:", err.message);
-    }
-  }
-
-  const transport = createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.Gmail,
-      pass: process.env.Password,
-    },
-  });
+  const transport = createMailTransport();
+  const fromEmail = process.env.BREVO_USER || process.env.Gmail;
 
   return await transport.sendMail({
-    from: `"Samarpan Math Academy" <${process.env.Gmail}>`,
+    from: `"Samarpan Math Academy" <${fromEmail}>`,
     to: data.email,
     subject,
     html,
