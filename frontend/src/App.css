@@ -6,27 +6,31 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-
-      font-family: Arial, sans-serif;
+      font-family: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f8f7f2;
+      color: #1f2937;
     }
 
     .common-btn {
-      background-color: #8a4baf;
+      background-color: #172554;
       color: white;
-      padding: 10px 20px;
+      padding: 10px 22px;
       border: none;
-      border-radius: 5px;
-      font-size: 18px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: all 0.25s ease;
       margin-top: 10px;
 
       &:hover {
-        background-color: #5f357e;
+        background-color: #1e3a8a;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(23, 37, 84, 0.15);
       }
 
       @media (max-width: 768px) {
-        font-size: 16px;
+        font-size: 15px;
       }
     }
 

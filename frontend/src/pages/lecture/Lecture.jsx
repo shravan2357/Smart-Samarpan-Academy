@@ -191,26 +191,29 @@ const Lecture = ({ user }) => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="bg-gray-100 min-h-screen py-8 md:py-16">
-          <div className="container mx-auto px-4">
+        <div className="bg-[#f8f7f2] min-h-screen py-8 md:py-12">
+          <div className="container mx-auto px-4 max-w-6xl">
             {/* Progress Bar */}
-            <div className="max-w-4xl mx-auto mb-10 text-center text-gray-700 font-semibold">
-              <h2 className="text-xl md:text-2xl mb-2">
-                Lecture completed - {completedLec} out of {lectLength}
-              </h2>
-              <div className="bg-gray-300 w-full rounded-full h-2.5">
+            <div className="max-w-3xl mx-auto mb-8 bg-white p-5 rounded-2xl border border-[#e5e1d8] shadow-sm text-center">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-bold text-[#172554]">Course Progress</span>
+                <span className="text-xs font-semibold px-2.5 py-0.5 bg-[#ccfbf1] text-[#0f766e] rounded-full">
+                  {completedLec || 0} of {lectLength || 0} Completed
+                </span>
+              </div>
+              <div className="bg-gray-100 w-full rounded-full h-3 overflow-hidden border border-gray-200">
                 <div
-                  className="bg-purple-600 h-2.5 rounded-full transition-all duration-500"
+                  className="bg-[#0f766e] h-3 rounded-full transition-all duration-500"
                   style={{ width: `${completed}%` }}
                 ></div>
               </div>
-              <span className="text-sm mt-2 block">{completed || 0}%</span>
+              <span className="text-xs text-gray-500 font-semibold mt-2 block">{completed || 0}% Completed</span>
             </div>
 
             {/* Main Content: Video Player and Lecture List */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left Column: Video Player */}
-              <div className="lg:col-span-2 bg-white rounded-xl shadow-lg p-4">
+              <div className="lg:col-span-2 bg-white rounded-2xl border border-[#e5e1d8] shadow-sm p-5">
                 {lecLoading ? (
                   <div className="h-96 flex items-center justify-center">
                     <Loading />
@@ -219,7 +222,7 @@ const Lecture = ({ user }) => {
                   <>
                     {lecture.video ? (
                       <>
-                        <div className="relative pt-[56.25%]"> {/* 16:9 aspect ratio */}
+                        <div className="relative pt-[56.25%] bg-black rounded-xl overflow-hidden shadow-sm"> {/* 16:9 aspect ratio */}
                           {isYouTubeUrl(lecture.video) ? (
                             <iframe
                               src={getYouTubeEmbedUrl(lecture.video)}
@@ -241,14 +244,18 @@ const Lecture = ({ user }) => {
                             ></video>
                           )}
                         </div>
-                        <div className="mt-6 space-y-2">
-                          <h1 className="text-3xl font-bold text-gray-800">{lecture.title}</h1>
-                          <p className="text-md text-gray-600">{lecture.description}</p>
+                        <div className="mt-5 space-y-2">
+                          <h1 className="text-2xl font-bold text-[#172554]">{lecture.title}</h1>
+                          <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{lecture.description}</p>
                         </div>
                       </>
                     ) : (
-                      <div className="h-96 flex items-center justify-center">
-                        <h1 className="text-2xl font-bold text-gray-500">Please Select a Lecture</h1>
+                      <div className="h-96 flex flex-col items-center justify-center text-center p-6">
+                        <div className="w-16 h-16 rounded-full bg-[#f4f2eb] flex items-center justify-center text-2xl text-[#172554] mb-3">
+                          🎓
+                        </div>
+                        <h2 className="text-xl font-bold text-[#172554] mb-1">Select a Lecture to Begin</h2>
+                        <p className="text-sm text-gray-500 max-w-sm">Choose from the lecture playlist on the right to start watching and tracking your progress.</p>
                       </div>
                     )}
                   </>
@@ -256,81 +263,93 @@ const Lecture = ({ user }) => {
               </div>
 
               {/* Right Column: Lecture List & Admin Tools */}
-              <div className="lg:col-span-1 bg-white rounded-xl shadow-lg p-4">
+              <div className="lg:col-span-1 bg-white rounded-2xl border border-[#e5e1d8] shadow-sm p-5 h-fit">
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                  <h3 className="font-bold text-[#172554] text-base">Course Lectures</h3>
+                  <span className="text-xs bg-[#f4f2eb] text-[#172554] font-bold px-2 py-0.5 rounded-full">
+                    {lectures?.length || 0} Lessons
+                  </span>
+                </div>
+
                 {user && user.role === "admin" && (
                   <button
                     onClick={() => setShow(!show)}
-                    className={`w-full text-white py-2 px-4 rounded-lg font-semibold transition-colors duration-300 flex items-center justify-center ${
-                      show ? "bg-red-600 hover:bg-red-700" : "bg-purple-600 hover:bg-purple-700"
+                    className={`w-full text-white py-2.5 px-4 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center mb-4 ${
+                      show ? "bg-red-600 hover:bg-red-700" : "bg-[#172554] hover:bg-[#1e3a8a]"
                     }`}
                   >
                     {show ? <FaTimes className="mr-2" /> : <FaPlus className="mr-2" />}
-                    {show ? "Close" : "Add Lecture"}
+                    {show ? "Close" : "Add New Lecture"}
                   </button>
                 )}
 
                 {show && (
-                  <div className="mt-4 p-4 border border-gray-200 rounded-lg">
-                    <h2 className="text-xl font-bold text-gray-800 mb-4">Add Lecture</h2>
-                    <form onSubmit={submitHandler} className="space-y-4">
+                  <div className="mb-4 p-4 bg-[#f8f7f2] border border-[#e5e1d8] rounded-xl">
+                    <h4 className="text-sm font-bold text-[#172554] mb-3">Add New Lecture</h4>
+                    <form onSubmit={submitHandler} className="space-y-3">
                       <div>
-                        <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                        <input type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)} required className="w-full border border-gray-300 rounded-md p-2 focus:ring-purple-500 focus:border-purple-500"/>
+                        <label htmlFor="title" className="block text-xs font-semibold text-gray-700 mb-1">Title</label>
+                        <input type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)} required className="w-full border border-[#e5e1d8] rounded-lg p-2 text-xs focus:outline-none focus:border-[#0f766e] bg-white"/>
                       </div>
                       <div>
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                        <input type="text" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required className="w-full border border-gray-300 rounded-md p-2 focus:ring-purple-500 focus:border-purple-500"/>
+                        <label htmlFor="description" className="block text-xs font-semibold text-gray-700 mb-1">Description</label>
+                        <input type="text" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required className="w-full border border-[#e5e1d8] rounded-lg p-2 text-xs focus:outline-none focus:border-[#0f766e] bg-white"/>
                       </div>
                       <div>
-                        <label htmlFor="video-file" className="block text-sm font-medium text-gray-700 mb-1">Option A: Upload Video File (.mp4)</label>
-                        <input type="file" id="video-file" accept="video/*" onChange={changeVideoHandler} className="w-full border border-gray-300 rounded-md p-2"/>
+                        <label htmlFor="video-file" className="block text-xs font-semibold text-gray-700 mb-1">Option A: Upload Video File</label>
+                        <input type="file" id="video-file" accept="video/*" onChange={changeVideoHandler} className="w-full border border-[#e5e1d8] rounded-lg p-1.5 text-xs bg-white"/>
                       </div>
-                      <div className="text-center font-bold text-gray-400 text-xs my-1">OR</div>
+                      <div className="text-center font-bold text-gray-400 text-xs my-0.5">OR</div>
                       <div>
-                        <label htmlFor="video-url" className="block text-sm font-medium text-gray-700 mb-1">Option B: YouTube / Video Link</label>
-                        <input type="url" id="video-url" placeholder="https://www.youtube.com/watch?v=..." value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} className="w-full border border-gray-300 rounded-md p-2 focus:ring-purple-500 focus:border-purple-500"/>
+                        <label htmlFor="video-url" className="block text-xs font-semibold text-gray-700 mb-1">Option B: YouTube Link</label>
+                        <input type="url" id="video-url" placeholder="https://www.youtube.com/watch?v=..." value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} className="w-full border border-[#e5e1d8] rounded-lg p-2 text-xs focus:outline-none focus:border-[#0f766e] bg-white"/>
                       </div>
                       {videoPrev && (
-                        <video src={videoPrev} className="w-full rounded-md" controls></video>
+                        <video src={videoPrev} className="w-full rounded-lg mb-2" controls></video>
                       )}
-                      <button disabled={btnLoading} type="submit" className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold transition-colors duration-300 hover:bg-purple-700 flex items-center justify-center">
-                        {btnLoading ? <><FaSpinner className="animate-spin mr-2" />Please Wait...</> : "Add"}
+                      <button disabled={btnLoading} type="submit" className="w-full bg-[#172554] text-white py-2 rounded-lg font-bold text-xs transition-colors hover:bg-[#1e3a8a] flex items-center justify-center">
+                        {btnLoading ? <><FaSpinner className="animate-spin mr-2" />Please Wait...</> : "Publish Lecture"}
                       </button>
                     </form>
                   </div>
                 )}
 
-                <div className="mt-4 space-y-2">
+                <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
                   {lectures && lectures.length > 0 ? (
                     lectures.map((e, i) => (
                       <div
                         key={e._id}
                         onClick={() => fetchLecture(e._id)}
-                        className={`flex items-center justify-between p-4 rounded-lg cursor-pointer transition-colors duration-200 ${
-                          lecture._id === e._id ? "bg-purple-600 text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-800"
+                        className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all duration-150 border ${
+                          lecture._id === e._id 
+                            ? "bg-[#172554] text-white border-[#172554] shadow-sm" 
+                            : "bg-[#f8f7f2] hover:bg-[#f1efe9] text-gray-800 border-[#e5e1d8]"
                         }`}
                       >
-                        <div className="flex items-center">
-                          <span className="font-bold mr-2">{i + 1}.</span>
-                          <span>{e.title}</span>
+                        <div className="flex items-center space-x-2 truncate">
+                          <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${lecture._id === e._id ? "bg-white/20 text-white" : "bg-white text-gray-700 border border-[#e5e1d8]"}`}>
+                            {i + 1}
+                          </span>
+                          <span className="text-xs font-semibold truncate">{e.title}</span>
                           {progress[0] && progress[0].completedLectures.includes(e._id) && (
-                            <span className="ml-2 text-green-500">
-                              <TiTick className="text-xl" />
+                            <span className="ml-1 text-emerald-400">
+                              <TiTick className="text-lg inline" />
                             </span>
                           )}
                         </div>
                         {user && user.role === "admin" && (
                           <button
                             onClick={(event) => { event.stopPropagation(); deleteHandler(e._id); }}
-                            className="text-red-500 hover:text-red-700 transition-colors"
+                            className={`p-1.5 rounded transition-colors ml-2 ${lecture._id === e._id ? "text-red-200 hover:text-red-100" : "text-red-500 hover:text-red-700"}`}
+                            title="Delete lecture"
                           >
-                            <FaTrash />
+                            <FaTrash className="text-xs" />
                           </button>
                         )}
                       </div>
                     ))
                   ) : (
-                    <p className="text-gray-500 text-center py-4">No Lectures Yet!</p>
+                    <p className="text-gray-400 text-xs text-center py-6">No lectures uploaded yet.</p>
                   )}
                 </div>
               </div>

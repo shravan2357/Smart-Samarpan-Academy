@@ -1,13 +1,28 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Home.css";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import Testimonials from "../../components/testimonials/Testimonials";
 import {
-  FaGraduationCap, FaRobot, FaLaptopCode, FaEye,
-  FaLightbulb, FaCrosshairs, FaChartLine, FaBookOpen,
-  FaRocket, FaStar, FaArrowRight, FaPlay,
-  FaUsers, FaAward, FaBrain, FaInfinity,
-  FaCheckCircle, FaShieldAlt, FaClock,
+  FaGraduationCap,
+  FaRobot,
+  FaLaptopCode,
+  FaEye,
+  FaLightbulb,
+  FaCrosshairs,
+  FaChartLine,
+  FaBookOpen,
+  FaRocket,
+  FaStar,
+  FaArrowRight,
+  FaUsers,
+  FaAward,
+  FaBrain,
+  FaInfinity,
+  FaCheckCircle,
+  FaShieldAlt,
+  FaClock,
+  FaCalculator,
+  FaChalkboardTeacher,
 } from "react-icons/fa";
 
 /* ─────────────────────────────────────────────────────────────
@@ -16,14 +31,17 @@ import {
 function useScrollReveal(options = {}) {
   useEffect(() => {
     const targets = document.querySelectorAll(".sma-reveal");
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("sma-revealed");
-          observer.unobserve(entry.target); // fire once
-        }
-      });
-    }, { threshold: 0.12, ...options });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("sma-revealed");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, ...options }
+    );
     targets.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
@@ -32,7 +50,7 @@ function useScrollReveal(options = {}) {
 /* ─────────────────────────────────────────────────────────────
    Animated Counter Hook
 ───────────────────────────────────────────────────────────── */
-function useCountUp(target, duration = 2200, start = false) {
+function useCountUp(target, duration = 2000, start = false) {
   const [count, setCount] = useState(0);
   useEffect(() => {
     if (!start) return;
@@ -50,9 +68,9 @@ function useCountUp(target, duration = 2200, start = false) {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Typing Headline Hook
+   Typing Topic Hook
 ───────────────────────────────────────────────────────────── */
-function useTypewriter(words, speed = 90, pause = 1800) {
+function useTypewriter(words, speed = 80, pause = 1800) {
   const [display, setDisplay] = useState("");
   const [wordIdx, setWordIdx] = useState(0);
   const [charIdx, setCharIdx] = useState(0);
@@ -84,27 +102,23 @@ function useTypewriter(words, speed = 90, pause = 1800) {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Floating Particle
-───────────────────────────────────────────────────────────── */
-function Particle({ style }) {
-  return <div className="sma-particle" style={style} />;
-}
-
-/* ─────────────────────────────────────────────────────────────
    Stats Counter Card
 ───────────────────────────────────────────────────────────── */
 function StatCard({ icon: Icon, target, suffix, label, started, delay }) {
-  const count = useCountUp(target, 2200, started);
+  const count = useCountUp(target, 2000, started);
   return (
-    <div className="sma-stat-card sma-reveal sma-reveal-up" style={{ transitionDelay: delay }}>
+    <div
+      className="sma-stat-card sma-reveal sma-reveal-up"
+      style={{ transitionDelay: delay }}
+    >
       <div className="sma-stat-icon-wrap">
         <Icon />
       </div>
       <div className="sma-stat-number">
-        {count.toLocaleString()}{suffix}
+        {count.toLocaleString()}
+        {suffix}
       </div>
       <div className="sma-stat-label">{label}</div>
-      <div className="sma-stat-shine" />
     </div>
   );
 }
@@ -112,17 +126,20 @@ function StatCard({ icon: Icon, target, suffix, label, started, delay }) {
 /* ─────────────────────────────────────────────────────────────
    Feature Card
 ───────────────────────────────────────────────────────────── */
-function FeatureCard({ icon: Icon, title, description, accent, index, onClick, btnLabel }) {
+function FeatureCard({
+  icon: Icon,
+  title,
+  description,
+  accent,
+  index,
+  onClick,
+  btnLabel,
+}) {
   return (
     <div
       className="sma-feature-card sma-reveal sma-reveal-up"
-      style={{ "--accent": accent, transitionDelay: `${index * 0.12}s` }}
+      style={{ "--accent": accent, transitionDelay: `${index * 0.1}s` }}
     >
-      {/* animated border top */}
-      <div className="sma-card-border-top" />
-      {/* bg glow on hover */}
-      <div className="sma-card-hover-glow" />
-
       <div className="sma-feature-icon-wrap">
         <Icon className="sma-feature-icon" />
       </div>
@@ -144,7 +161,7 @@ function PillarCard({ icon: Icon, title, description, color, index }) {
   return (
     <div
       className="sma-pillar-card sma-reveal sma-reveal-up"
-      style={{ transitionDelay: `${index * 0.13}s` }}
+      style={{ transitionDelay: `${index * 0.1}s` }}
     >
       <div className="sma-pillar-icon-ring" style={{ background: color }}>
         <Icon />
@@ -152,7 +169,7 @@ function PillarCard({ icon: Icon, title, description, color, index }) {
       <h4 className="sma-pillar-title">{title}</h4>
       <p className="sma-pillar-desc">{description}</p>
       <div className="sma-pillar-check">
-        <FaCheckCircle style={{ color: "#a855f7" }} />
+        <FaCheckCircle style={{ color: "#0F766E" }} />
       </div>
     </div>
   );
@@ -166,10 +183,16 @@ const Home = ({ isAuth, user }) => {
   const location = useLocation();
   const statsRef = useRef(null);
   const [statsVisible, setStatsVisible] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  /* Typed words for hero */
-  const typedWord = useTypewriter(["Algebra", "Calculus", "Geometry", "Statistics", "Trigonometry"]);
+  /* Typed topics for hero highlight */
+  const typedTopic = useTypewriter([
+    "Calculus & Integration",
+    "Algebra & Matrices",
+    "Coordinate Geometry",
+    "Trigonometry & Vectors",
+    "Probability & Statistics",
+    "JEE & Board Mathematics",
+  ]);
 
   /* Scroll reveal hook */
   useScrollReveal();
@@ -181,196 +204,385 @@ const Home = ({ isAuth, user }) => {
   /* Intersection Observer for stats counter */
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setStatsVisible(true); },
-      { threshold: 0.3 }
+      ([entry]) => {
+        if (entry.isIntersecting) setStatsVisible(true);
+      },
+      { threshold: 0.25 }
     );
     if (statsRef.current) observer.observe(statsRef.current);
     return () => observer.disconnect();
   }, []);
 
-  /* Mouse parallax on hero */
-  const handleMouseMove = useCallback((e) => {
-    const { innerWidth, innerHeight } = window;
-    setMousePos({
-      x: (e.clientX / innerWidth - 0.5) * 20,
-      y: (e.clientY / innerHeight - 0.5) * 20,
-    });
-  }, []);
-
-  /* Floating particles */
-  const particles = useRef(
-    Array.from({ length: 22 }, () => ({
-      width:  `${Math.random() * 12 + 3}px`,
-      height: `${Math.random() * 12 + 3}px`,
-      left:   `${Math.random() * 100}%`,
-      top:    `${Math.random() * 100}%`,
-      animationDuration: `${Math.random() * 10 + 7}s`,
-      animationDelay:    `${Math.random() * 6}s`,
-      opacity: Math.random() * 0.45 + 0.08,
-    }))
-  ).current;
-
   return (
     <div className="sma-home">
+      {/* ══ SUBTLE BACKGROUND MATH WATERMARKS ═══════════════ */}
+      <div className="sma-math-watermarks" aria-hidden="true">
+        <span className="sma-watermark-sym wm-1">π</span>
+        <span className="sma-watermark-sym wm-2">∑</span>
+        <span className="sma-watermark-sym wm-3">∫ f(x) dx</span>
+        <span className="sma-watermark-sym wm-4">√x</span>
+        <span className="sma-watermark-sym wm-5">e^(iπ) + 1 = 0</span>
+        <span className="sma-watermark-sym wm-6">a² + b² = c²</span>
+        <span className="sma-watermark-sym wm-7">lim x→0</span>
+        <span className="sma-watermark-sym wm-8">sin²θ + cos²θ = 1</span>
+        <span className="sma-watermark-sym wm-9">∇ × B</span>
+        <span className="sma-watermark-sym wm-10">Δy / Δx</span>
+      </div>
 
       {/* ══ HERO ══════════════════════════════════════════════ */}
-      <section className="sma-hero" onMouseMove={handleMouseMove}>
-        <div className="sma-hero-bg" />
-        <div className="sma-hero-grid" />
+      <section className="sma-hero">
+        <div className="sma-hero-container">
+          {/* Left Column: Hero Text & Actions */}
+          <div className="sma-hero-text-col">
+            {/* Trust Badge */}
+            <div className="sma-hero-badge">
+              <FaStar className="sma-badge-star" />
+              <span>Premier Mathematics Coaching &amp; Smart Learning</span>
+            </div>
 
-        {/* Moving orbs follow mouse */}
-        <div
-          className="sma-hero-orb sma-orb-a"
-          style={{ transform: `translate(${mousePos.x * 1.2}px, ${mousePos.y * 1.2}px)` }}
-        />
-        <div
-          className="sma-hero-orb sma-orb-b"
-          style={{ transform: `translate(${-mousePos.x * 0.8}px, ${-mousePos.y * 0.8}px)` }}
-        />
+            {/* Main Headline */}
+            <h1 className="sma-hero-heading">
+              Master Mathematics
+              <span className="sma-hero-subheading">with Samarpan Academy</span>
+            </h1>
 
-        {/* Particles */}
-        <div className="sma-particles-container">
-          {particles.map((p, i) => <Particle key={i} style={p} />)}
-        </div>
-
-        {/* Content */}
-        <div className="sma-hero-content">
-          {/* Badge */}
-          <div className="sma-hero-badge sma-animate-badge">
-            <FaStar style={{ color: "#fbbf24", marginRight: 6 }} />
-            India's #1 AI-Powered Math Academy
-          </div>
-
-          {/* Headline */}
-          <h1 className="sma-hero-heading sma-animate-heading">
-            Master{" "}
-            <span className="sma-typewriter-wrap">
-              <span className="sma-typewriter">{typedWord}</span>
+            {/* Dynamic Math Domain Callout */}
+            <div className="sma-topic-callout">
+              <span className="sma-topic-label">Specialized In:</span>
+              <span className="sma-topic-dynamic">{typedTopic}</span>
               <span className="sma-cursor">|</span>
-            </span>
-            <br />
-            <span className="sma-hero-gradient-text">with Samarpan Academy</span>
-          </h1>
+            </div>
 
-          {/* Subtext */}
-          <p className="sma-hero-subtext sma-animate-subtext">
-            Master complex concepts with expert-led courses, personalized
-            learning paths, and cutting-edge AI tools for quizzes &amp; formula
-            generation.
-          </p>
+            {/* Description */}
+            <p className="sma-hero-subtext">
+              Build unshakable conceptual foundations with expert-led courses,
+              structured problem-solving practice, and intelligent AI tools
+              designed for CBSE, State Boards, and JEE preparation.
+            </p>
 
-          {/* Action Buttons */}
-          <div className="sma-hero-actions sma-animate-actions">
-            <button className="sma-btn-primary" onClick={() => navigate("/courses")}>
-              <FaRocket style={{ marginRight: 8 }} />
-              Explore Courses
-            </button>
-            <button className="sma-btn-ghost" onClick={() => navigate("/ai-tools")}>
-              <span className="sma-play-ring">
-                <FaPlay style={{ fontSize: 11 }} />
+            {/* Action Buttons */}
+            <div className="sma-hero-actions">
+              <button
+                className="sma-btn-primary"
+                onClick={() => navigate("/courses")}
+              >
+                <FaRocket style={{ marginRight: 8 }} />
+                Explore Courses
+              </button>
+              <button
+                className="sma-btn-secondary"
+                onClick={() => navigate("/ai-tools")}
+              >
+                <FaRobot style={{ marginRight: 8, color: "#0F766E" }} />
+                Try AI Tools
+              </button>
+            </div>
+
+            {/* Trust Points */}
+            <div className="sma-hero-trust">
+              <span className="sma-trust-chip">
+                <FaCheckCircle className="sma-trust-check" />
+                Expert Faculty
               </span>
-              Try AI Tools
-            </button>
-          </div>
-
-          {/* Trust chips */}
-          <div className="sma-hero-trust sma-animate-trust">
-            {["Expert Instructors", "AI-Powered", "24/7 Access"].map((t, i) => (
-              <span key={t} className="sma-trust-chip" style={{ animationDelay: `${0.9 + i * 0.15}s` }}>
-                <FaCheckCircle style={{ color: "#a855f7", marginRight: 5 }} />
-                {t}
+              <span className="sma-trust-chip">
+                <FaCheckCircle className="sma-trust-check" />
+                NCERT, Boards &amp; JEE
               </span>
-            ))}
+              <span className="sma-trust-chip">
+                <FaCheckCircle className="sma-trust-check" />
+                AI Practice Quizzes
+              </span>
+            </div>
+          </div>
+
+          {/* Right Column: Realistic Classroom & Math Visual Showcase */}
+          <div className="sma-hero-visual-col">
+            <div className="sma-academic-card">
+              {/* Card Header */}
+              <div className="sma-academic-header">
+                <div className="sma-card-header-left">
+                  <span className="sma-status-dot"></span>
+                  <span className="sma-academic-title">
+                    Classroom Concept Board
+                  </span>
+                </div>
+                <span className="sma-academic-tag">Mathematics Foundation</span>
+              </div>
+
+              {/* Board Body with Educational Equations & Diagrams */}
+              <div className="sma-chalkboard-content">
+                <div className="sma-board-topline">
+                  <div className="sma-board-formula">
+                    <span className="sma-math-tag">Calculus</span>
+                    <span className="sma-math-eq">
+                      ∫ xⁿ dx = (xⁿ⁺¹)/(n+1) + C
+                    </span>
+                  </div>
+                  <div className="sma-board-formula">
+                    <span className="sma-math-tag">Algebra</span>
+                    <span className="sma-math-eq">
+                      x = [-b ± √(b² - 4ac)] / 2a
+                    </span>
+                  </div>
+                </div>
+
+                {/* Geometric / Graph SVG Illustration */}
+                <div className="sma-math-graphic-wrap">
+                  <svg
+                    viewBox="0 0 360 140"
+                    className="sma-math-svg"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    {/* Grid Lines */}
+                    <path
+                      d="M10 20 H350 M10 50 H350 M10 80 H350 M10 110 H350"
+                      stroke="#E2E8F0"
+                      strokeWidth="1"
+                      strokeDasharray="3 3"
+                    />
+                    <path
+                      d="M60 10 V130 M120 10 V130 M180 10 V130 M240 10 V130 M300 10 V130"
+                      stroke="#E2E8F0"
+                      strokeWidth="1"
+                      strokeDasharray="3 3"
+                    />
+
+                    {/* Coordinate Axes */}
+                    <line
+                      x1="30"
+                      y1="75"
+                      x2="340"
+                      y2="75"
+                      stroke="#94A3B8"
+                      strokeWidth="1.5"
+                    />
+                    <line
+                      x1="180"
+                      y1="10"
+                      x2="180"
+                      y2="130"
+                      stroke="#94A3B8"
+                      strokeWidth="1.5"
+                    />
+
+                    {/* Smooth Parabola Curve */}
+                    <path
+                      d="M70 120 Q 180 -10 290 120"
+                      stroke="#0F766E"
+                      strokeWidth="3"
+                      fill="none"
+                    />
+
+                    {/* Sine Wave */}
+                    <path
+                      d="M40 75 Q 75 35 110 75 T 180 75 T 250 75 T 320 75"
+                      stroke="#D97706"
+                      strokeWidth="2"
+                      strokeDasharray="4 2"
+                      fill="none"
+                    />
+
+                    {/* Key Coordinate Points */}
+                    <circle cx="180" cy="20" r="5" fill="#172554" />
+                    <text
+                      x="190"
+                      y="24"
+                      fill="#172554"
+                      fontSize="11"
+                      fontWeight="700"
+                    >
+                      Vertex (h, k)
+                    </text>
+
+                    <circle cx="110" cy="75" r="4" fill="#0F766E" />
+                    <text
+                      x="90"
+                      y="92"
+                      fill="#0F766E"
+                      fontSize="10"
+                      fontWeight="600"
+                    >
+                      Roots x₁
+                    </text>
+
+                    <circle cx="250" cy="75" r="4" fill="#0F766E" />
+                    <text
+                      x="255"
+                      y="92"
+                      fill="#0F766E"
+                      fontSize="10"
+                      fontWeight="600"
+                    >
+                      x₂
+                    </text>
+                  </svg>
+                </div>
+
+                {/* Additional Formula Badges */}
+                <div className="sma-board-bottomline">
+                  <span className="sma-pill-eq">
+                    📐 sin²θ + cos²θ = 1
+                  </span>
+                  <span className="sma-pill-eq">
+                    📏 a² + b² = c²
+                  </span>
+                  <span className="sma-pill-eq">
+                    ∑ n = n(n+1)/2
+                  </span>
+                </div>
+              </div>
+
+              {/* Floating Academic Badges */}
+              <div className="sma-floating-badge badge-top-right">
+                <div className="sma-float-icon-wrap" style={{ background: "#FEF3C7" }}>
+                  <FaStar style={{ color: "#D97706" }} />
+                </div>
+                <div>
+                  <div className="sma-float-title">4.9 / 5 Rating</div>
+                  <div className="sma-float-subtitle">12,000+ Students</div>
+                </div>
+              </div>
+
+              <div className="sma-floating-badge badge-bottom-left">
+                <div className="sma-float-icon-wrap" style={{ background: "#CCFBF1" }}>
+                  <FaCheckCircle style={{ color: "#0F766E" }} />
+                </div>
+                <div>
+                  <div className="sma-float-title">98% Clarity Rate</div>
+                  <div className="sma-float-subtitle">Concept Mastery</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Floating glass cards */}
-        <div className="sma-hero-float-card sma-float-card-1 sma-animate-float-card-l">
-          <FaBrain style={{ color: "#a855f7", fontSize: 22 }} />
-          <div>
-            <div style={{ fontWeight: 700, fontSize: 14 }}>AI Quiz Ready</div>
-            <div style={{ fontSize: 11, opacity: 0.7 }}>Personalized for you</div>
-          </div>
-          <div className="sma-float-card-dot" />
-        </div>
-        <div className="sma-hero-float-card sma-float-card-2 sma-animate-float-card-r">
-          <FaAward style={{ color: "#fbbf24", fontSize: 22 }} />
-          <div>
-            <div style={{ fontWeight: 700, fontSize: 14 }}>Top Rated</div>
-            <div style={{ fontSize: 11, opacity: 0.7 }}>★★★★★ 4.9/5</div>
-          </div>
-        </div>
-
-
       </section>
 
-      {/* ══ STATS ════════════════════════════════════════════ */}
+      {/* ══ STATS SECTION ═════════════════════════════════════ */}
       <section className="sma-stats-section" ref={statsRef}>
         <div className="sma-section-inner">
           <div className="sma-stats-grid">
-            <StatCard icon={FaUsers}    target={12000} suffix="+" label="Students Enrolled"    started={statsVisible} delay="0s" />
-            <StatCard icon={FaBookOpen} target={80}    suffix="+" label="Courses Available"    started={statsVisible} delay="0.1s" />
-            <StatCard icon={FaAward}    target={98}    suffix="%" label="Satisfaction Rate"    started={statsVisible} delay="0.2s" />
-            <StatCard icon={FaInfinity} target={500}   suffix="+" label="AI Quizzes Generated" started={statsVisible} delay="0.3s" />
+            <StatCard
+              icon={FaUsers}
+              target={12000}
+              suffix="+"
+              label="Students Enrolled"
+              started={statsVisible}
+              delay="0s"
+            />
+            <StatCard
+              icon={FaBookOpen}
+              target={80}
+              suffix="+"
+              label="Comprehensive Courses"
+              started={statsVisible}
+              delay="0.1s"
+            />
+            <StatCard
+              icon={FaAward}
+              target={98}
+              suffix="%"
+              label="Concept Clarity Rate"
+              started={statsVisible}
+              delay="0.2s"
+            />
+            <StatCard
+              icon={FaInfinity}
+              target={500}
+              suffix="+"
+              label="AI Practice Quizzes"
+              started={statsVisible}
+              delay="0.3s"
+            />
           </div>
         </div>
       </section>
 
       {/* ══ WHY SAMARPAN ═════════════════════════════════════ */}
-      <section className="sma-section sma-section-dark">
+      <section className="sma-section sma-section-warm">
         <div className="sma-section-inner">
           <div className="sma-section-header sma-reveal sma-reveal-up">
-            <span className="sma-section-pill">Why Us</span>
+            <span className="sma-section-pill">Why Samarpan</span>
             <h2 className="sma-section-title">
-              Why Choose <span className="sma-purple">Samarpan</span> Math Academy?
+              Why Choose <span className="sma-navy-highlight">Samarpan</span> Math Academy?
             </h2>
             <p className="sma-section-subtitle">
-              Everything you need to master mathematics — in one intelligent platform.
+              A comprehensive mathematical learning ecosystem combining master
+              pedagogy, structured problem sheets, and intelligent AI tools.
             </p>
           </div>
           <div className="sma-features-grid">
-            <FeatureCard index={0} icon={FaGraduationCap} title="Expert-Led Courses"
-              description="Learn from experienced instructors who simplify complex math topics for deep understanding and strong foundations."
-              accent="#a855f7" />
-            <FeatureCard index={1} icon={FaRobot} title="AI-Powered Learning"
-              description="Instant quiz generation, comprehensive formula lookups, and personalized recommendations — all powered by AI."
-              accent="#3b82f6" onClick={() => navigate("/ai-tools")} btnLabel="Try AI Tools" />
-            <FeatureCard index={2} icon={FaLaptopCode} title="Flexible & Accessible"
-              description="Study at your own pace, anytime, anywhere. Our platform is designed for your convenience and busy schedule."
-              accent="#10b981" />
-            <FeatureCard index={3} icon={FaShieldAlt} title="Trusted & Secure"
-              description="Your data, progress, and learning journey are protected with enterprise-grade security and privacy standards."
-              accent="#f59e0b" />
+            <FeatureCard
+              index={0}
+              icon={FaChalkboardTeacher}
+              title="Expert-Led Masterclasses"
+              description="Learn from experienced mathematics faculty who break down complex formulas, theorems, and proofs into crystal-clear intuitive steps."
+              accent="#172554"
+            />
+            <FeatureCard
+              index={1}
+              icon={FaRobot}
+              title="Intelligent AI Practice"
+              description="Generate chapter-wise practice quizzes, master key formulas on demand, and receive personalized study recommendations 24/7."
+              accent="#0F766E"
+              onClick={() => navigate("/ai-tools")}
+              btnLabel="Try AI Tools"
+            />
+            <FeatureCard
+              index={2}
+              icon={FaLaptopCode}
+              title="Structured & Flexible"
+              description="Access structured video lectures, downloadable notes, and graded problem sets anytime, anywhere, at your own individual pace."
+              accent="#D97706"
+            />
+            <FeatureCard
+              index={3}
+              icon={FaShieldAlt}
+              title="Proven Exam Pedagogy"
+              description="Thoroughly mapped to CBSE, State Board, and JEE syllabus requirements with a proven track record of top student scores."
+              accent="#1E3A8A"
+            />
           </div>
         </div>
       </section>
 
-      {/* ══ VISION ═══════════════════════════════════════════ */}
+      {/* ══ OUR VISION & PHILOSOPHY ═══════════════════════════ */}
       <section className="sma-vision-section">
-        <div className="sma-vision-bg-orb sma-orb-1" />
-        <div className="sma-vision-bg-orb sma-orb-2" />
-        {/* Rotating ring decoration */}
-        <div className="sma-vision-ring" />
         <div className="sma-section-inner sma-vision-inner">
           <div className="sma-vision-icon-wrap sma-reveal sma-reveal-zoom">
             <FaEye />
           </div>
-          <span className="sma-section-pill sma-reveal sma-reveal-up" style={{ transitionDelay: "0.1s" }}>Our Vision</span>
-          <h2 className="sma-section-title sma-reveal sma-reveal-up" style={{ marginTop: 12, transitionDelay: "0.2s" }}>
-            Redefining Math Education
+          <span
+            className="sma-section-pill sma-reveal sma-reveal-up"
+            style={{ transitionDelay: "0.1s" }}
+          >
+            Our Philosophy
+          </span>
+          <h2
+            className="sma-section-title sma-reveal sma-reveal-up"
+            style={{ marginTop: 12, transitionDelay: "0.2s" }}
+          >
+            Conquering the Fear of Mathematics
           </h2>
-          <p className="sma-vision-text sma-reveal sma-reveal-up" style={{ transitionDelay: "0.3s" }}>
-            At Samarpan Math Academy, we envision a world where every student
-            can conquer their fear of mathematics and unlock their full
-            potential. We are committed to providing high-quality, accessible,
-            and innovative learning experiences that foster deep understanding
-            and a lifelong love for numbers.
+          <p
+            className="sma-vision-text sma-reveal sma-reveal-up"
+            style={{ transitionDelay: "0.3s" }}
+          >
+            At Samarpan Math Academy, we believe mathematics is not about rote
+            memorization — it is the art of clear, logical thinking. Our
+            mission is to transform mathematics from an intimidating hurdle
+            into a student's greatest academic strength through foundational
+            clarity, guided problem solving, and modern learning technology.
           </p>
-          <div className="sma-vision-perks sma-reveal sma-reveal-up" style={{ transitionDelay: "0.4s" }}>
+          <div
+            className="sma-vision-perks sma-reveal sma-reveal-up"
+            style={{ transitionDelay: "0.4s" }}
+          >
             {[
-              { icon: FaClock,     label: "Learn at Your Pace" },
-              { icon: FaBrain,     label: "Adaptive Curriculum" },
-              { icon: FaChartLine, label: "Progress Analytics" },
+              { icon: FaClock, label: "Self-Paced Learning" },
+              { icon: FaBrain, label: "Adaptive Difficulty" },
+              { icon: FaChartLine, label: "Progress Tracking" },
+              { icon: FaCalculator, label: "Formula Mastery" },
             ].map(({ icon: Icon, label }) => (
               <div key={label} className="sma-vision-perk">
                 <Icon className="sma-perk-icon" />
@@ -381,87 +593,134 @@ const Home = ({ isAuth, user }) => {
           <Link
             to="/about"
             className="sma-btn-primary sma-reveal sma-reveal-up"
-            style={{ textDecoration: "none", display: "inline-flex", marginTop: 28, transitionDelay: "0.5s" }}
+            style={{
+              textDecoration: "none",
+              display: "inline-flex",
+              marginTop: 32,
+              transitionDelay: "0.5s",
+            }}
           >
-            Learn More About Us <FaArrowRight style={{ marginLeft: 8 }} />
+            Learn More About Our Faculty <FaArrowRight style={{ marginLeft: 8 }} />
           </Link>
         </div>
       </section>
 
       {/* ══ TESTIMONIALS ═════════════════════════════════════ */}
-      <section className="sma-section sma-section-dark">
+      <section className="sma-section sma-section-warm">
         <div className="sma-section-inner">
           <div className="sma-section-header sma-reveal sma-reveal-up">
             <span className="sma-section-pill">Student Stories</span>
             <h2 className="sma-section-title">
-              Hear from Our <span className="sma-purple">Students</span>
+              Hear from Our <span className="sma-navy-highlight">Students</span>
             </h2>
+            <p className="sma-section-subtitle">
+              Authentic feedback and success stories from students preparing for
+              Board exams, Olympiads, and JEE.
+            </p>
           </div>
           <Testimonials />
         </div>
       </section>
 
       {/* ══ WHAT SETS US APART ═══════════════════════════════ */}
-      <section className="sma-section" style={{ background: "#0f0c1a" }}>
+      <section className="sma-section sma-section-white">
         <div className="sma-section-inner">
           <div className="sma-section-header sma-reveal sma-reveal-up">
-            <span className="sma-section-pill">Our Edge</span>
+            <span className="sma-section-pill">The Samarpan Advantage</span>
             <h2 className="sma-section-title">
-              What <span className="sma-purple">Sets Us Apart</span>
+              What <span className="sma-navy-highlight">Sets Us Apart</span>
             </h2>
             <p className="sma-section-subtitle">
-              Every feature is built to accelerate your learning and results.
+              Every lesson, problem sheet, and AI tool is designed to deliver
+              measurable academic results.
             </p>
           </div>
           <div className="sma-pillars-grid">
-            <PillarCard index={0} icon={FaLightbulb}  color="rgba(251,191,36,0.15)"  title="Conceptual Clarity"   description="Build strong fundamentals through crystal-clear explanations and step-by-step walkthroughs." />
-            <PillarCard index={1} icon={FaCrosshairs} color="rgba(239,68,68,0.15)"   title="Targeted Practice"    description="AI-tailored quizzes match your exact level so every minute of practice counts." />
-            <PillarCard index={2} icon={FaChartLine}  color="rgba(99,102,241,0.15)"  title="Performance Tracking" description="Monitor your growth with detailed analytics and personalized AI-driven insights." />
-            <PillarCard index={3} icon={FaBookOpen}   color="rgba(16,185,129,0.15)"  title="Rich Content Library" description="Access a vast, ever-growing collection of courses, lectures, and practice resources." />
+            <PillarCard
+              index={0}
+              icon={FaLightbulb}
+              color="#FEF3C7"
+              title="First-Principles Clarity"
+              description="Master the fundamental 'why' behind every mathematical theorem before practicing exam questions."
+            />
+            <PillarCard
+              index={1}
+              icon={FaCrosshairs}
+              color="#FFE4E6"
+              title="Targeted Problem Sets"
+              description="Curated question banks graded from NCERT fundamentals up to advanced competitive exam level."
+            />
+            <PillarCard
+              index={2}
+              icon={FaChartLine}
+              color="#E0E7FF"
+              title="Diagnostic Analytics"
+              description="Identify weak topics and knowledge gaps quickly with intelligent performance insights."
+            />
+            <PillarCard
+              index={3}
+              icon={FaBookOpen}
+              color="#CCFBF1"
+              title="Rich Academic Library"
+              description="Full video solutions, downloadable formula handbooks, and previous years' solved question papers."
+            />
           </div>
         </div>
       </section>
 
-      {/* ══ CTA ══════════════════════════════════════════════ */}
+      {/* ══ CTA SECTION ═══════════════════════════════════════ */}
       <section className="sma-cta-section">
-        <div className="sma-cta-glow" />
-        <div className="sma-cta-particles">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="sma-cta-sparkle" style={{ animationDelay: `${i * 0.4}s`, left: `${10 + i * 11}%` }} />
-          ))}
-        </div>
         <div className="sma-section-inner sma-cta-inner">
           <div className="sma-cta-icon-ring sma-reveal sma-reveal-zoom">
-            <FaRocket />
+            <FaGraduationCap />
           </div>
-          <h2 className="sma-cta-title sma-reveal sma-reveal-up" style={{ transitionDelay: "0.15s" }}>
-            Ready to Transform Your
-            <span className="sma-hero-gradient-text"> Math Journey?</span>
+          <h2
+            className="sma-cta-title sma-reveal sma-reveal-up"
+            style={{ transitionDelay: "0.15s" }}
+          >
+            Ready to Master Mathematics with Confidence?
           </h2>
-          <p className="sma-cta-subtitle sma-reveal sma-reveal-up" style={{ transitionDelay: "0.25s" }}>
-            Join thousands of students achieving their academic goals with Samarpan Math Academy.
+          <p
+            className="sma-cta-subtitle sma-reveal sma-reveal-up"
+            style={{ transitionDelay: "0.25s" }}
+          >
+            Join over 12,000 students achieving academic excellence with
+            Samarpan Math Academy today.
           </p>
-          <div className="sma-reveal sma-reveal-up" style={{ transitionDelay: "0.35s" }}>
+          <div
+            className="sma-reveal sma-reveal-up"
+            style={{ transitionDelay: "0.35s" }}
+          >
             {!isAuth ? (
-              <button className="sma-btn-primary sma-cta-btn" onClick={() => navigate("/register")}>
-                Sign Up Today — It's Free!
+              <button
+                className="sma-btn-cta"
+                onClick={() => navigate("/register")}
+              >
+                Sign Up Today — Start Learning
                 <FaArrowRight style={{ marginLeft: 10 }} />
               </button>
             ) : (
-              <button className="sma-btn-primary sma-cta-btn" onClick={() => navigate(`/${user._id}/dashboard`)}>
+              <button
+                className="sma-btn-cta"
+                onClick={() => navigate(`/${user?._id || "dashboard"}/dashboard`)}
+              >
                 Go to My Dashboard
                 <FaArrowRight style={{ marginLeft: 10 }} />
               </button>
             )}
           </div>
-          <p className="sma-cta-note sma-reveal sma-reveal-up" style={{ transitionDelay: "0.45s" }}>
-            No credit card required &bull; Cancel anytime
+          <p
+            className="sma-cta-note sma-reveal sma-reveal-up"
+            style={{ transitionDelay: "0.45s" }}
+          >
+            Free registration &bull; Access free practice modules &bull; Trusted
+            by teachers &amp; parents
           </p>
         </div>
       </section>
-
     </div>
   );
 };
 
 export default Home;
+

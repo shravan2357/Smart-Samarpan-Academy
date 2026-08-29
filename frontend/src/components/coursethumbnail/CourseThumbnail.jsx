@@ -1,38 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { server } from "../../main";
 import "./CourseThumbnail.css";
 
-// Local class-specific assets
+// Local class-specific fallback assets
 import lec9th  from "../../assets/lec_9th.jpg";
 import lec10th from "../../assets/lec_10th.jpg";
 import lec11th from "../../assets/lec_11th.jpg";
 import lec12th from "../../assets/lec_12th.jpg";
+import defaultImg from "../../assets/img.jpg";
 
-/* ── Category → gradient theme ─────────────────────────────── */
+/* ── Build clean URL from stored image path ─────────────────── */
+export const buildImageUrl = (imgPath) => {
+  if (!imgPath || typeof imgPath !== "string") return null;
+  const cleaned = imgPath.trim().replace(/\\/g, "/");
+  if (
+    cleaned.startsWith("http://") ||
+    cleaned.startsWith("https://") ||
+    cleaned.startsWith("data:") ||
+    cleaned.startsWith("blob:")
+  ) {
+    return cleaned;
+  }
+  const normalized = cleaned.startsWith("/") ? cleaned.slice(1) : cleaned;
+  return server ? `${server}/${normalized}` : `/${normalized}`;
+};
+
+/* ── Category → Academic Theme ─────────────────────────────── */
 const getCategoryTheme = (category = "", title = "") => {
   const text = (category + " " + title).toLowerCase();
-  if (text.includes("9th"))     return { gradient: "linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%)", accent: "#64b5f6",  emoji: "🔵", label: "Class 9"   };
-  if (text.includes("10th"))    return { gradient: "linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)", accent: "#81c784",  emoji: "🟢", label: "Class 10"  };
-  if (text.includes("11th"))    return { gradient: "linear-gradient(135deg, #e65100 0%, #bf360c 100%)", accent: "#ffb74d",  emoji: "🟠", label: "Class 11"  };
-  if (text.includes("12th"))    return { gradient: "linear-gradient(135deg, #6a1b9a 0%, #4a148c 100%)", accent: "#ce93d8",  emoji: "🟣", label: "Class 12"  };
+  if (text.includes("9th"))     return { gradient: "linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%)", accent: "#38bdf8", emoji: "📐", label: "Class 9th"   };
+  if (text.includes("10th"))    return { gradient: "linear-gradient(135deg, #0f766e 0%, #042f2e 100%)", accent: "#2dd4bf", emoji: "📊", label: "Class 10th"  };
+  if (text.includes("11th"))    return { gradient: "linear-gradient(135deg, #b45309 0%, #451a03 100%)", accent: "#fbbf24", emoji: "🔬", label: "Class 11th"  };
+  if (text.includes("12th"))    return { gradient: "linear-gradient(135deg, #172554 0%, #1e1b4b 100%)", accent: "#93c5fd", emoji: "🎓", label: "Class 12th"  };
   if (text.includes("mains") || text.includes("jee"))
-                                return { gradient: "linear-gradient(135deg, #c62828 0%, #7f0000 100%)", accent: "#ef9a9a",  emoji: "🔴", label: "JEE"        };
-  if (text.includes("advanced"))return { gradient: "linear-gradient(135deg, #00695c 0%, #004d40 100%)", accent: "#80cbc4",  emoji: "⚡", label: "Advanced"  };
-  if (text.includes("olympiad"))return { gradient: "linear-gradient(135deg, #f57f17 0%, #e65100 100%)", accent: "#fff176",  emoji: "🏆", label: "Olympiad"  };
-  return                               { gradient: "linear-gradient(135deg, #263238 0%, #37474f 100%)", accent: "#90a4ae",  emoji: "🎓", label: "Course"     };
+                                return { gradient: "linear-gradient(135deg, #991b1b 0%, #450a0a 100%)", accent: "#fca5a5", emoji: "🎯", label: "JEE Main"  };
+  if (text.includes("advanced"))return { gradient: "linear-gradient(135deg, #115e59 0%, #042f2e 100%)", accent: "#5eead4", emoji: "⚡", label: "JEE Advanced"  };
+  if (text.includes("olympiad"))return { gradient: "linear-gradient(135deg, #c2410c 0%, #7c2d12 100%)", accent: "#fdba74", emoji: "🏆", label: "Olympiad"  };
+  return                               { gradient: "linear-gradient(135deg, #172554 0%, #0f172a 100%)", accent: "#38bdf8", emoji: "📚", label: "Mathematics" };
 };
 
-/* ── Local fallback image by class ─────────────────────────── */
+/* ── Match Local Class Asset ───────────────────────────────── */
 const getLocalClassImage = (category = "", title = "") => {
   const text = (category + " " + title).toLowerCase();
-  if (text.includes("9th"))  return lec9th;
-  if (text.includes("10th")) return lec10th;
-  if (text.includes("11th")) return lec11th;
-  if (text.includes("12th")) return lec12th;
-  return null;
+  if (text.includes("9th") || text.includes("class 9"))  return lec9th;
+  if (text.includes("10th") || text.includes("class 10")) return lec10th;
+  if (text.includes("11th") || text.includes("class 11")) return lec11th;
+  if (text.includes("12th") || text.includes("class 12")) return lec12th;
+  return defaultImg;
 };
 
-/* ── Title Card (shown while loading OR as final fallback) ─── */
+/* ── Academic Title Card Fallback ──────────────────────────── */
 const TitleCard = ({ course, theme, className, style }) => (
   <div
     className={`crs-thumb-title-card ${className}`}
@@ -42,11 +59,11 @@ const TitleCard = ({ course, theme, className, style }) => (
     <div className="crs-thumb-circle crs-thumb-circle-2" />
     <div className="crs-thumb-circle crs-thumb-circle-3" />
     <div className="crs-thumb-content">
-      <div className="crs-thumb-badge" style={{ background: theme.accent + "30", color: theme.accent }}>
+      <div className="crs-thumb-badge" style={{ background: theme.accent + "25", color: theme.accent, border: `1px solid ${theme.accent}40` }}>
         {theme.emoji} {theme.label}
       </div>
-      <h3 className="crs-thumb-title">{course.title}</h3>
-      {course.createdBy && (
+      <h3 className="crs-thumb-title">{course?.title || "Mathematics Course"}</h3>
+      {course?.createdBy && (
         <p className="crs-thumb-by" style={{ color: theme.accent }}>
           by {course.createdBy}
         </p>
@@ -56,87 +73,58 @@ const TitleCard = ({ course, theme, className, style }) => (
   </div>
 );
 
-/* ── Image with loading state ───────────────────────────────── */
-const ImageWithFallback = ({ src, course, theme, className, style, onError }) => {
-  const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState(false);
-
-  const handleError = () => {
-    setError(true);
-    onError && onError();
-  };
-
-  if (error) return null; // parent handle karega
-
-  return (
-    <>
-      {/* Jab tak image load na ho → title card dikhao */}
-      {!loaded && (
-        <TitleCard course={course} theme={theme} className={className} style={style} />
-      )}
-
-      {/* Image hidden rakhte hain jab tak load na ho, phir fade-in */}
-      <img
-        src={src}
-        alt={course.title}
-        className={className}
-        style={{ ...style, display: loaded ? "block" : "none" }}
-        onLoad={() => setLoaded(true)}
-        onError={handleError}
-      />
-    </>
-  );
-};
-
 /* ── Main CourseThumbnail Component ─────────────────────────── */
 const CourseThumbnail = ({ course, className = "", style = {} }) => {
-  const [uploadedImgError, setUploadedImgError] = useState(false);
-  const [localImgError,    setLocalImgError]    = useState(false);
-
   if (!course) return null;
 
+  const uploadedUrl = buildImageUrl(course.image);
+  const fallbackAsset = getLocalClassImage(course.category, course.title);
   const theme = getCategoryTheme(course.category, course.title);
 
-  // ── Step 1: Admin ne custom thumbnail upload ki → wahi dikhao
-  let uploadedImageUrl = null;
-  if (!uploadedImgError && course.image) {
-    if (course.image.startsWith("http://") || course.image.startsWith("https://")) {
-      uploadedImageUrl = course.image;
-    } else if (server) {
-      uploadedImageUrl = `${server}/${course.image}`;
+  // Status state: 0 = try uploadedUrl, 1 = try fallbackAsset, 2 = show TitleCard
+  const [stage, setStage] = useState(uploadedUrl ? 0 : 1);
+  const [imgLoaded, setImgLoaded] = useState(false);
+
+  useEffect(() => {
+    setStage(uploadedUrl ? 0 : 1);
+    setImgLoaded(false);
+  }, [course?.image, course?._id]);
+
+  const handleError = () => {
+    if (stage === 0) {
+      setStage(1); // fallback to local asset
+    } else if (stage === 1) {
+      setStage(2); // fallback to title card
     }
+  };
+
+  if (stage === 2) {
+    return <TitleCard course={course} theme={theme} className={className} style={style} />;
   }
 
-  if (uploadedImageUrl) {
-    return (
-      <ImageWithFallback
-        src={uploadedImageUrl}
-        course={course}
-        theme={theme}
-        className={className}
-        style={style}
-        onError={() => setUploadedImgError(true)}
+  const currentSrc = stage === 0 ? uploadedUrl : fallbackAsset;
+
+  return (
+    <div className={`relative overflow-hidden bg-[#f1efe9] w-full h-full flex items-center justify-center ${className}`} style={style}>
+      {/* TitleCard placeholder while image is fetching/rendering */}
+      {!imgLoaded && (
+        <div className="absolute inset-0 z-0">
+          <TitleCard course={course} theme={theme} className="w-full h-full" />
+        </div>
+      )}
+
+      <img
+        src={currentSrc}
+        alt={course.title || "Course thumbnail"}
+        className={`w-full h-full object-cover transition-opacity duration-300 relative z-10 ${
+          imgLoaded ? "opacity-100" : "opacity-0"
+        }`}
+        onLoad={() => setImgLoaded(true)}
+        onError={handleError}
+        loading="lazy"
       />
-    );
-  }
-
-  // ── Step 2: Local class image (lec_9th, lec_10th etc.)
-  const localImage = getLocalClassImage(course.category, course.title);
-  if (localImage && !localImgError) {
-    return (
-      <ImageWithFallback
-        src={localImage}
-        course={course}
-        theme={theme}
-        className={className}
-        style={style}
-        onError={() => setLocalImgError(true)}
-      />
-    );
-  }
-
-  // ── Step 3: Sirf title card dikhao (koi image nahi)
-  return <TitleCard course={course} theme={theme} className={className} style={style} />;
+    </div>
+  );
 };
 
 export default CourseThumbnail;

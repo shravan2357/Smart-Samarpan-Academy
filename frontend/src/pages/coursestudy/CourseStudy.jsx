@@ -25,36 +25,39 @@ const CourseStudy = ({ user }) => {
   return (
     <>
       {course && (
-        <div className="bg-gray-100 min-h-screen py-16 flex flex-col items-center">
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-purple-700 mb-6">
+        <div className="bg-[#f8f7f2] min-h-screen py-14 flex flex-col items-center">
+          <div className="container mx-auto px-4 text-center max-w-4xl">
+            <div className="inline-block px-3 py-1 bg-[#fef3c7] text-[#b45309] text-xs font-bold rounded-full uppercase tracking-wider mb-4 border border-[#fde68a]">
+              Active Study Portal
+            </div>
+            <h1 className="text-3xl md:text-4xl font-extrabold text-[#172554] mb-6">
               {course.title}
             </h1>
 
-            <CourseThumbnail
-              course={course}
-              className="w-full max-w-4xl rounded-xl shadow-lg mx-auto mb-8"
-              style={{ minHeight: '280px' }}
-            />
+            <div className="bg-white p-6 rounded-2xl border border-[#e5e1d8] shadow-sm mb-8 text-left">
+              <CourseThumbnail
+                course={course}
+                className="w-full max-w-3xl rounded-xl border border-[#e5e1d8] mx-auto mb-6 object-cover"
+                style={{ minHeight: '260px', maxHeight: '360px' }}
+              />
 
-            <div className="max-w-3xl mx-auto space-y-4">
-              <p className="text-lg text-gray-700 leading-relaxed italic">
-                {course.description}
-              </p>
-              <p className="text-md text-gray-500">
-                <span className="font-semibold text-gray-700">by:</span> {course.createdBy}
-              </p>
-              <p className="text-md text-gray-500">
-                <span className="font-semibold text-gray-700">Duration:</span> {course.duration} weeks
-              </p>
+              <div className="space-y-4 max-w-2xl mx-auto text-center">
+                <p className="text-base text-gray-700 leading-relaxed">
+                  {course.description}
+                </p>
+                <div className="flex justify-center gap-6 text-sm text-gray-600 pt-2 border-t border-gray-100">
+                  <p><span className="font-semibold text-gray-800">Faculty:</span> {course.createdBy}</p>
+                  <p><span className="font-semibold text-gray-800">Duration:</span> {course.duration} weeks</p>
+                </div>
+              </div>
             </div>
 
-            <div className="mt-12">
+            <div>
               <Link
                 to={`/lectures/${course._id}`}
-                className="inline-block bg-purple-600 text-white py-3 px-8 rounded-full font-bold shadow-md hover:bg-purple-700 transition-colors"
+                className="inline-block bg-[#172554] text-white py-3.5 px-10 rounded-xl font-bold shadow-sm hover:bg-[#1e3a8a] hover:shadow-md transition-all"
               >
-                Go to Lectures
+                Access Classroom Lectures →
               </Link>
             </div>
           </div>

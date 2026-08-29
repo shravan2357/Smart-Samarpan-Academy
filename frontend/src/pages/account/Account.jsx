@@ -24,10 +24,10 @@ const Account = ({ user }) => {
     toast(`${feature} is coming soon!`, {
       icon: '🚀',
       style: {
-        borderRadius: '10px',
-        background: '#1a1635',
+        borderRadius: '8px',
+        background: '#172554',
         color: '#fff',
-        border: '1px solid rgba(168, 85, 247, 0.3)',
+        border: '1px solid #1e3a8a',
       },
     });
   };
@@ -36,12 +36,8 @@ const Account = ({ user }) => {
 
   return (
     <div className="ac-page">
-      {/* Background decorations */}
-      <div className="ac-bg-glow" />
-      <div className="ac-bg-grid" />
-
       <div className="ac-card">
-        {/* Banner with animated gradient */}
+        {/* Academic Navy Banner */}
         <div className="ac-card-banner" />
 
         {/* Profile Picture with rotating ring */}

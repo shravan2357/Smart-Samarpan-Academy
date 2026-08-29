@@ -32,19 +32,19 @@ const STATS = [
 ];
 
 const MISSION_CARDS = [
-  { icon: FaLightbulb, color: "#fbbf24", title: "Conceptual Clarity", desc: "We break down complex topics into simple, memorable steps." },
-  { icon: FaBrain,     color: "#a855f7", title: "AI-Powered Tools",  desc: "Smart quizzes & formula generators tailored to each learner." },
-  { icon: FaRocket,    color: "#3b82f6", title: "Fast Progress",     desc: "Structured paths help students move from basics to mastery." },
-  { icon: FaHeart,     color: "#ec4899", title: "Student First",     desc: "Every decision we make puts student success at the center." },
+  { icon: FaLightbulb, color: "#d97706", title: "Conceptual Clarity", desc: "We break down complex topics into simple, memorable steps." },
+  { icon: FaBrain,     color: "#0f766e", title: "AI-Powered Tools",  desc: "Smart quizzes & formula generators tailored to each learner." },
+  { icon: FaRocket,    color: "#172554", title: "Fast Progress",     desc: "Structured paths help students move from basics to mastery." },
+  { icon: FaHeart,     color: "#0d9488", title: "Student First",     desc: "Every decision we make puts student success at the center." },
 ];
 
 const VALUES = [
-  { icon: FaBullseye,        color: "#a855f7", title: "Excellence",    desc: "We hold ourselves to the highest academic and ethical standards in everything we deliver." },
-  { icon: FaLightbulb,       color: "#fbbf24", title: "Innovation",    desc: "We embrace technology and AI to make learning more engaging, effective and personalized." },
-  { icon: FaHeart,           color: "#ec4899", title: "Empathy",       desc: "We understand every student's journey is unique and tailor our support accordingly." },
-  { icon: FaShieldAlt,       color: "#10b981", title: "Integrity",     desc: "Honest, transparent and trustworthy in how we teach, price, and communicate." },
-  { icon: FaUsers,           color: "#3b82f6", title: "Community",     desc: "Building a vibrant, supportive community of math learners across India." },
-  { icon: FaGraduationCap,   color: "#6366f1", title: "Accessibility", desc: "Quality math education should be available to every student regardless of background." },
+  { icon: FaBullseye,        color: "#172554", title: "Excellence",    desc: "We hold ourselves to the highest academic and ethical standards in everything we deliver." },
+  { icon: FaLightbulb,       color: "#d97706", title: "Innovation",    desc: "We embrace technology and AI to make learning more engaging, effective and personalized." },
+  { icon: FaHeart,           color: "#0f766e", title: "Empathy",       desc: "We understand every student's journey is unique and tailor our support accordingly." },
+  { icon: FaShieldAlt,       color: "#059669", title: "Integrity",     desc: "Honest, transparent and trustworthy in how we teach, price, and communicate." },
+  { icon: FaUsers,           color: "#1e3a8a", title: "Community",     desc: "Building a vibrant, supportive community of math learners across India." },
+  { icon: FaGraduationCap,   color: "#0f766e", title: "Accessibility", desc: "Quality math education should be available to every student regardless of background." },
 ];
 
 /* ── Component ──────────────────────────────────────────────── */
@@ -185,7 +185,7 @@ const About = () => {
                 <div className="ab-cred">
                   <div
                     className="ab-cred-icon"
-                    style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.25)", color: "#6366f1" }}
+                    style={{ background: "#f1efe9", border: "1px solid #e2ded5", color: "#172554" }}
                   >
                     <FaGraduationCap />
                   </div>
@@ -199,7 +199,7 @@ const About = () => {
                 <div className="ab-cred">
                   <div
                     className="ab-cred-icon"
-                    style={{ background: "rgba(236,72,153,0.15)", border: "1px solid rgba(236,72,153,0.25)", color: "#ec4899" }}
+                    style={{ background: "#ccfbf1", border: "1px solid #99f6e4", color: "#0f766e" }}
                   >
                     <FaChalkboardTeacher />
                   </div>
@@ -213,14 +213,14 @@ const About = () => {
                 <div className="ab-cred">
                   <div
                     className="ab-cred-icon"
-                    style={{ background: "rgba(16,185,129,0.15)", border: "1px solid rgba(16,185,129,0.25)", color: "#10b981" }}
+                    style={{ background: "#fef3c7", border: "1px solid #fde68a", color: "#d97706" }}
                   >
                     <FaUserTie />
                   </div>
                   <div className="ab-cred-body">
                     <h5>Leadership &amp; Vision</h5>
                     <p>Founded Samarpan Academy to democratize math education</p>
-                    <p>Built India's first AI-powered vernacular math platform</p>
+                    <p>Built India's premier AI-powered math learning platform</p>
                   </div>
                 </div>
               </div>

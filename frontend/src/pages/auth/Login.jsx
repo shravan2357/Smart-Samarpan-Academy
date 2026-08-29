@@ -50,52 +50,60 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Login</h2>
-        <form onSubmit={submitHandler} className="space-y-5">
+    <div className="min-h-screen flex items-center justify-center bg-[#f8f7f2] p-4 py-12">
+      <div className="bg-white p-8 rounded-2xl border border-[#e5e1d8] shadow-sm w-full max-w-md">
+        <div className="text-center mb-6">
+          <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-[#fef3c7] text-[#b45309] rounded-full">
+            Samarpan Student Portal
+          </span>
+          <h2 className="text-2xl font-extrabold text-[#172554] mt-2">Welcome Back</h2>
+          <p className="text-xs text-gray-500 mt-1">Log in to access your mathematics courses &amp; quizzes</p>
+        </div>
+
+        <form onSubmit={submitHandler} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label htmlFor="email" className="block text-xs font-bold text-[#172554] mb-1 uppercase tracking-wider">Email Address</label>
             <input
               type="email"
               id="email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+              className="w-full px-3.5 py-2.5 border border-[#e5e1d8] rounded-xl text-sm focus:outline-none focus:border-[#0f766e] bg-[#f8f7f2]"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label htmlFor="password" className="block text-xs font-bold text-[#172554] mb-1 uppercase tracking-wider">Password</label>
             <input
-              type="text"
+              type="password"
               id="password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+              className="w-full px-3.5 py-2.5 border border-[#e5e1d8] rounded-xl text-sm focus:outline-none focus:border-[#0f766e] bg-[#f8f7f2]"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-             
+              placeholder="••••••••"
               required
             />
           </div>
 
-          <button disabled={btnLoading} type="submit" className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 font-semibold flex items-center justify-center">
-            {btnLoading ? "Please Wait..." : "Login"}
+          <button disabled={btnLoading} type="submit" className="w-full bg-[#172554] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#1e3a8a] transition-all shadow-sm flex items-center justify-center">
+            {btnLoading ? "Signing In..." : "Log In"}
           </button>
         </form>
         
-        <div className="mt-6 text-center">
-          <p className="text-gray-600 mb-2">
-            Don't have an account? <Link to="/register" className="text-purple-600 hover:underline font-medium">Register</Link>
+        <div className="mt-5 text-center text-xs space-y-2">
+          <p className="text-gray-600">
+            Don't have an account? <Link to="/register" className="text-[#0f766e] hover:underline font-bold">Register here</Link>
           </p>
           <p className="text-gray-600">
-            <Link to="/forgot" className="text-purple-600 hover:underline font-medium">Forgot password?</Link>
+            <Link to="/forgot" className="text-[#172554] hover:underline font-semibold">Forgot your password?</Link>
           </p>
         </div>
 
-        {/* NEW: Google Login Section */}
-        <div className="mt-8 pt-6 border-t border-gray-200 text-center">
-          <p className="text-gray-600 mb-4">Or login with</p>
+        {/* Google Login Section */}
+        <div className="mt-6 pt-5 border-t border-gray-100 text-center">
+          <p className="text-xs text-gray-500 mb-3 font-semibold uppercase tracking-wider">Or continue with</p>
           <div className="flex justify-center">
             <GoogleLogin
               onSuccess={googleSuccessHandler}

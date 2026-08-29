@@ -183,8 +183,8 @@ const AddCourse = ({ user }) => {
           </div>
           
           <div>
-            <label htmlFor="image" className="adm-label">Course Thumbnail</label>
-            <div className="flex items-center gap-4">
+            <label htmlFor="image" className="adm-label">Course Thumbnail Image</label>
+            <div className="flex flex-col gap-4">
               <input 
                 type="file" 
                 id="image" 
@@ -193,6 +193,18 @@ const AddCourse = ({ user }) => {
                 style={{ padding: '10px' }}
                 accept="image/*"
               />
+              {imagePrev && (
+                <div className="mt-2">
+                  <p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Thumbnail Preview:</p>
+                  <div className="w-64 h-40 rounded-xl overflow-hidden border-2 border-[#0f766e] shadow-sm bg-gray-50">
+                    <img 
+                      src={imagePrev} 
+                      alt="Thumbnail Preview" 
+                      className="w-full h-full object-cover" 
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

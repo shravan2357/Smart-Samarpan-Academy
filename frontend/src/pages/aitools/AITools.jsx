@@ -37,11 +37,11 @@ const InlineMath = ({ text }) => {
 const MarkdownRenderer = ({ text }) => {
   if (!text) return null;
   const lines = text.split('\n').map((line, i) => {
-    if (line.startsWith('### ')) return <h3 key={i} className="text-xl font-bold text-purple-700 mt-4 mb-2">{line.substring(4)}</h3>;
-    if (line.startsWith('## '))  return <h2 key={i} className="text-2xl font-bold text-purple-800 mt-6 mb-3">{line.substring(3)}</h2>;
-    if (line.startsWith('**'))  return <p key={i} className="my-1"><strong>{line.replace(/\*\*/g, '')}</strong></p>;
-    if (line.startsWith('* '))  return <li key={i} className="ml-6 list-disc">{line.substring(2)}</li>;
-    return <p key={i} className="my-1">{line}</p>;
+    if (line.startsWith('### ')) return <h3 key={i} className="text-lg font-bold text-[#172554] mt-4 mb-2">{line.substring(4)}</h3>;
+    if (line.startsWith('## '))  return <h2 key={i} className="text-xl font-extrabold text-[#172554] mt-5 mb-2.5">{line.substring(3)}</h2>;
+    if (line.startsWith('**'))  return <p key={i} className="my-1 text-[#172554]"><strong>{line.replace(/\*\*/g, '')}</strong></p>;
+    if (line.startsWith('* '))  return <li key={i} className="ml-6 list-disc text-gray-700">{line.substring(2)}</li>;
+    return <p key={i} className="my-1 text-gray-700">{line}</p>;
   });
   return <div className="text-gray-800 text-left prose max-w-none">{lines}</div>;
 };
@@ -59,9 +59,9 @@ const TOOLS = [
     emoji: '🧠',
     stat: '10 Qs',
     statLbl: 'Per Quiz',
-    color: '#a855f7',
-    glow: 'rgba(168,85,247,0.1)',
-    border: 'rgba(168,85,247,0.22)',
+    color: '#172554',
+    glow: 'rgba(23, 37, 84, 0.08)',
+    border: 'rgba(23, 37, 84, 0.18)',
   },
   {
     id: 'formula',
@@ -72,9 +72,9 @@ const TOOLS = [
     emoji: '📐',
     stat: '∞',
     statLbl: 'Formulas',
-    color: '#3b82f6',
-    glow: 'rgba(59,130,246,0.1)',
-    border: 'rgba(59,130,246,0.22)',
+    color: '#0f766e',
+    glow: 'rgba(15, 118, 110, 0.08)',
+    border: 'rgba(15, 118, 110, 0.18)',
   },
   {
     id: 'recommendation',
@@ -85,9 +85,9 @@ const TOOLS = [
     emoji: '💡',
     stat: 'AI',
     statLbl: 'Powered',
-    color: '#10b981',
-    glow: 'rgba(16,185,129,0.1)',
-    border: 'rgba(16,185,129,0.22)',
+    color: '#d97706',
+    glow: 'rgba(217, 119, 6, 0.08)',
+    border: 'rgba(217, 119, 6, 0.18)',
   },
   {
     id: 'analysis',
@@ -98,9 +98,9 @@ const TOOLS = [
     emoji: '📊',
     stat: '360°',
     statLbl: 'Insights',
-    color: '#f59e0b',
-    glow: 'rgba(245,158,11,0.1)',
-    border: 'rgba(245,158,11,0.22)',
+    color: '#1e3a8a',
+    glow: 'rgba(30, 58, 138, 0.08)',
+    border: 'rgba(30, 58, 138, 0.18)',
   },
 ];
 
@@ -163,19 +163,19 @@ const QuizGenerator = () => {
       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Generate Math Quiz</h2>
       <form onSubmit={handleGenerateQuiz} className="space-y-4 mb-8 max-w-lg mx-auto">
         <div>
-          <label htmlFor="quiz-topic" className="block text-sm font-medium text-gray-700 mb-1">Topic:</label>
-          <input type="text" id="quiz-topic" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+          <label htmlFor="quiz-topic" className="block text-xs font-bold text-[#172554] mb-1 uppercase tracking-wider">Topic:</label>
+          <input type="text" id="quiz-topic" className="w-full px-3.5 py-2.5 border border-[#e5e1d8] rounded-xl text-sm focus:outline-none focus:border-[#0f766e] bg-[#f8f7f2]"
             value={topic} onChange={e => setTopic(e.target.value)} placeholder="e.g., Algebra, Trigonometry" required />
         </div>
         <div>
-          <label htmlFor="quiz-difficulty" className="block text-sm font-medium text-gray-700 mb-1">Difficulty Level:</label>
-          <select id="quiz-difficulty" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+          <label htmlFor="quiz-difficulty" className="block text-xs font-bold text-[#172554] mb-1 uppercase tracking-wider">Difficulty Level:</label>
+          <select id="quiz-difficulty" className="w-full px-3.5 py-2.5 border border-[#e5e1d8] rounded-xl text-sm focus:outline-none focus:border-[#0f766e] bg-[#f8f7f2]"
             value={difficulty} onChange={e => setDifficulty(e.target.value)}>
             <option value="9th_10th_Olympiad">9th / 10th Grade Olympiad</option>
             <option value="11th_12th_JEE">11th / 12th Grade JEE</option>
           </select>
         </div>
-        <button type="submit" className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 flex items-center justify-center" disabled={loading}>
+        <button type="submit" className="w-full bg-[#172554] text-white py-3 px-4 rounded-xl font-bold text-sm hover:bg-[#1e3a8a] transition-all flex items-center justify-center shadow-sm" disabled={loading}>
           {loading ? <><FaSpinner className="animate-spin mr-2" /> Generating…</> : '⚡ Generate Quiz'}
         </button>
       </form>
@@ -377,17 +377,17 @@ const PerformanceAnalysis = () => {
       </p>
       <div className="text-center mb-8">
         <button onClick={handleAnalysisRequest} disabled={loading}
-          className="bg-purple-600 text-white font-bold py-3 px-8 rounded-full hover:bg-purple-700 focus:outline-none flex items-center justify-center mx-auto disabled:bg-gray-400 disabled:cursor-not-allowed transition-all">
-          {loading ? <><FaSpinner className="animate-spin mr-3" />Analysing…</> : <><FaBrain className="mr-3" />Analyse My Performance</>}
+          className="bg-[#172554] text-white font-bold py-3 px-8 rounded-xl hover:bg-[#1e3a8a] focus:outline-none flex items-center justify-center mx-auto disabled:bg-gray-400 disabled:cursor-not-allowed transition-all shadow-sm text-sm">
+          {loading ? <><FaSpinner className="animate-spin mr-3" />Analysing…</> : <><FaBrain className="mr-3 text-[#0f766e]" />Analyse My Performance</>}
         </button>
       </div>
 
       {analysis && (
-        <div className="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+        <div className="mt-8 p-6 bg-gray-50 rounded-xl border border-[#e5e1d8]">
           {analysis.chartData && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
               <div>
-                <h3 className="text-xl font-bold text-gray-700 mb-4 text-center">Topic Performance (%)</h3>
+                <h3 className="text-xl font-bold text-[#172554] mb-4 text-center">Topic Performance (%)</h3>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={analysis.chartData.topicPerformance} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -395,7 +395,7 @@ const PerformanceAnalysis = () => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="averageScore" fill="#8884d8" name="Average Score" />
+                    <Bar dataKey="averageScore" fill="#0f766e" name="Average Score" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

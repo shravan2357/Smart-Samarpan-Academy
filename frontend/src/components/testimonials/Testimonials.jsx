@@ -1,82 +1,89 @@
 import React from "react";
+import { FaQuoteLeft, FaStar } from "react-icons/fa";
 
 const Testimonials = () => {
   const testimonialsData = [
     {
       id: 1,
       name: "Rahul Sharma",
-      position: "JEE Aspirant",
+      position: "JEE Main & Advanced Aspirant",
       message:
-        "The AI quiz generator is a game-changer! It helped me identify my weak spots in a very efficient way. Highly recommended for any serious student.",
-      logoUrl: "https://ui-avatars.com/api/?name=Rahul+Sharma&background=E55D87&color=fff",
+        "The AI quiz generator and concept breakdowns are incredible! I was able to identify my weak spots in Integral Calculus and improve my mock test score by 35 marks.",
+      logoUrl: "https://ui-avatars.com/api/?name=Rahul+Sharma&background=172554&color=fff",
+      stars: 5,
     },
     {
       id: 2,
       name: "Priya Patel",
-      position: "Olympiad Contender",
+      position: "Olympiad & Class 11 Student",
       message:
-        "I've learned more here than in any other place. The interactive lessons and AI-powered tools make learning enjoyable and effective.",
-      logoUrl: "https://ui-avatars.com/api/?name=Priya+Patel&background=F5B548&color=fff",
+        "The step-by-step problem walkthroughs make complex Coordinate Geometry so easy to grasp. The faculty genuinely cares about making fundamentals rock solid.",
+      logoUrl: "https://ui-avatars.com/api/?name=Priya+Patel&background=0F766E&color=fff",
+      stars: 5,
     },
     {
       id: 3,
       name: "Amit Kumar",
-      position: "Student, Class 10",
+      position: "CBSE Class 10 (Scored 98/100)",
       message:
-        "This platform helped me learn complex topics so effectively. The courses are amazing and the instructors are top-notch.",
-      logoUrl: "https://ui-avatars.com/api/?name=Amit+Kumar&background=A2D2FF&color=fff",
+        "Before joining Samarpan, math was my most stressful subject. The structured chapter practice and formula sheets helped me score 98% in my Board exams!",
+      logoUrl: "https://ui-avatars.com/api/?name=Amit+Kumar&background=D97706&color=fff",
+      stars: 5,
     },
     {
       id: 4,
       name: "Neha Singh",
-      position: "Medical Aspirant",
+      position: "Class 12 Board Aspirant",
       message:
-        "The formula generator is a lifesaver! I can quickly get all the formulas for any chapter I'm struggling with, which saves so much time.",
-      logoUrl: "https://ui-avatars.com/api/?name=Neha+Singh&background=84DCC6&color=fff",
+        "The formula generator and quick revision notes are lifesavers before exams. I can revise three whole units in less than an hour with full confidence.",
+      logoUrl: "https://ui-avatars.com/api/?name=Neha+Singh&background=0284C7&color=fff",
+      stars: 5,
     },
     {
-        id: 5,
-        name: "Vikram Gupta",
-        position: "Student, Class 12",
-        message:
-          "The personalized recommendations are spot on. It feels like I have a personal tutor guiding my study plan. Thank you, Samarpan Math Academy!",
-        logoUrl: "https://ui-avatars.com/api/?name=Vikram+Gupta&background=6B778D&color=fff",
+      id: 5,
+      name: "Vikram Gupta",
+      position: "Class 12 Student & JEE Aspirant",
+      message:
+        "The personalized AI recommendations feel like having a personal mentor by your side 24/7. Truly the best mathematics platform for serious students.",
+      logoUrl: "https://ui-avatars.com/api/?name=Vikram+Gupta&background=475569&color=fff",
+      stars: 5,
     },
   ];
 
   return (
-    <section className="bg-gray-50 py-16">
-      <div className="container mx-auto px-4">
-        {/* Section Heading */}
-        <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-12">
-          Hear from Our Students
-        </h2>
-
-        {/* Testimonials Container - Horizontal Scroll */}
-        <div className="flex flex-nowrap overflow-x-auto gap-8 pb-4 scrollbar-thin scrollbar-thumb-purple-300 scrollbar-track-purple-100">
-          {testimonialsData.map((e) => (
-            <div
-              className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300 min-w-[320px] max-w-[320px] md:min-w-[350px] md:max-w-[350px] flex flex-col justify-between"
-              key={e.id}
-            >
-              {/* Student Logo and Info */}
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
-                  <img src={e.logoUrl} alt={e.name} className="w-full h-full object-cover" />
-                </div>
-                <div>
-                  <p className="font-bold text-lg text-gray-900">{e.name}</p>
-                  <p className="text-sm text-gray-500">{e.position}</p>
-                </div>
-              </div>
-
-              {/* Testimonial Message */}
-              <p className="text-gray-700 leading-relaxed italic mt-auto">"{e.message}"</p>
+    <div className="sma-testimonials-wrap">
+      <div className="sma-testimonials-slider">
+        {testimonialsData.map((e) => (
+          <div className="sma-testimonial-card" key={e.id}>
+            <div className="sma-testimonial-quote-icon">
+              <FaQuoteLeft />
             </div>
-          ))}
-        </div>
+
+            <div className="sma-testimonial-stars">
+              {Array.from({ length: e.stars }).map((_, idx) => (
+                <FaStar key={idx} className="sma-star-icon" />
+              ))}
+            </div>
+
+            {/* Testimonial Message */}
+            <p className="sma-testimonial-msg">"{e.message}"</p>
+
+            {/* Student Info */}
+            <div className="sma-testimonial-author">
+              <img
+                src={e.logoUrl}
+                alt={e.name}
+                className="sma-testimonial-avatar"
+              />
+              <div className="sma-testimonial-meta">
+                <div className="sma-testimonial-name">{e.name}</div>
+                <div className="sma-testimonial-role">{e.position}</div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-    </section>
+    </div>
   );
 };
 

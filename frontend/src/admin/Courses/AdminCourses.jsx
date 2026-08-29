@@ -28,32 +28,26 @@ const AdminCourses = ({ user }) => {
 
   return (
     <Layout>
-      <div className="bg-gray-100 min-h-screen py-16">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-extrabold text-gray-800 mb-6 text-center">
-            All Courses
-          </h1>
-          {loading ? (
-            <Loading />
+      <div className="mb-6">
+        <h2 className="adm-page-title mb-2">Manage All Courses</h2>
+        <p className="text-sm text-gray-600">Review, inspect, or manage all published courses on Samarpan Math Academy.</p>
+      </div>
+
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {courses && courses.length > 0 ? (
+            courses.map((e) => {
+              return <CourseCard key={e._id} course={e} />;
+            })
           ) : (
-            // This div ensures the entire grid of cards is centered
-            <div className="flex justify-center">
-              {/* The grid for course cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                {courses && courses.length > 0 ? (
-                  courses.map((e) => {
-                    return <CourseCard key={e._id} course={e} />;
-                  })
-                ) : (
-                  <p className="col-span-full text-center text-gray-500 text-xl mt-8">
-                    No Courses Yet
-                  </p>
-                )}
-              </div>
+            <div className="col-span-full text-center py-16 bg-white border border-[#e5e1d8] rounded-2xl">
+              <p className="text-gray-500 text-lg">No courses published yet.</p>
             </div>
           )}
         </div>
-      </div>
+      )}
     </Layout>
   );
 };

@@ -68,20 +68,20 @@ const Verify = () => {
         <h2>Verify Account</h2>
 
         <div style={{
-          backgroundColor: '#f0f7ff',
-          border: '1px solid #cce5ff',
-          borderRadius: '8px',
-          padding: '12px 16px',
-          marginBottom: '18px',
+          backgroundColor: '#f8f7f2',
+          border: '1px solid #e5e1d8',
+          borderRadius: '12px',
+          padding: '14px 16px',
+          marginBottom: '20px',
           textAlign: 'center'
         }}>
-          <p style={{ margin: 0, fontSize: '13px', color: '#495057' }}>
+          <p style={{ margin: 0, fontSize: '12.5px', color: '#4b5563' }}>
             Verification code sent to your email:
           </p>
-          <p style={{ margin: '4px 0 0 0', fontSize: '15px', fontWeight: 'bold', color: '#007bff' }}>
+          <p style={{ margin: '4px 0 0 0', fontSize: '14.5px', fontWeight: '800', color: '#172554' }}>
             {email || "your registered email"}
           </p>
-          <p style={{ margin: '6px 0 0 0', fontSize: '12px', color: '#6c757d' }}>
+          <p style={{ margin: '6px 0 0 0', fontSize: '11.5px', color: '#6b7280' }}>
             📩 (Please check your <strong>Inbox</strong> or <strong>Spam/Junk</strong> folder)
           </p>
         </div>
@@ -98,13 +98,13 @@ const Verify = () => {
             autoFocus
           />
           <button disabled={btnLoading} type="submit" className="common-btn">
-            {btnLoading ? "Please Wait..." : "Verify OTP"}
+            {btnLoading ? "Please Wait..." : "Verify & Activate Account"}
           </button>
         </form>
 
         {/* Resend OTP with Timer */}
         <div style={{ marginTop: '16px', textAlign: 'center' }}>
-          <p style={{ margin: 0, fontSize: '13px', color: '#666' }}>
+          <p style={{ margin: 0, fontSize: '13px', color: '#4b5563' }}>
             Didn't receive the email?{" "}
             {canResend ? (
               <button
@@ -114,7 +114,7 @@ const Verify = () => {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#007bff',
+                  color: '#0f766e',
                   fontWeight: 'bold',
                   cursor: 'pointer',
                   padding: 0,
@@ -125,7 +125,7 @@ const Verify = () => {
                 Resend OTP
               </button>
             ) : (
-              <span style={{ color: '#888', fontWeight: 600 }}>
+              <span style={{ color: '#94a3b8', fontWeight: 600 }}>
                 Resend in {timer}s
               </span>
             )}

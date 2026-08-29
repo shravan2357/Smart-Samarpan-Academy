@@ -5,11 +5,7 @@ import "./Admin.css";
 const Layout = ({ children }) => {
   return (
     <div className="adm-layout">
-      {/* Background decorations for the entire admin area */}
-      <div className="adm-bg-glow" />
-      <div className="adm-bg-grid" />
-
-      {/* Glassmorphism Sidebar */}
+      {/* Admin Sidebar */}
       <Sidebar />
 
       {/* Main Content Area */}
