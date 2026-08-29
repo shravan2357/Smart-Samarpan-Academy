@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Home.css";
+import mathClassroomBg from "../../assets/math_classroom_bg.jpg";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import Testimonials from "../../components/testimonials/Testimonials";
 import {
@@ -215,6 +216,15 @@ const Home = ({ isAuth, user }) => {
 
   return (
     <div className="sma-home">
+      {/* ══ FULL-SCREEN SUBTLE MATHEMATICS CLASSROOM BACKGROUND ══ */}
+      <div className="sma-home-bg-backdrop" aria-hidden="true">
+        <div
+          className="sma-home-bg-image"
+          style={{ backgroundImage: `url(${mathClassroomBg})` }}
+        />
+        <div className="sma-home-bg-overlay" />
+      </div>
+
       {/* ══ SUBTLE BACKGROUND MATH WATERMARKS ═══════════════ */}
       <div className="sma-math-watermarks" aria-hidden="true">
         <span className="sma-watermark-sym wm-1">π</span>
