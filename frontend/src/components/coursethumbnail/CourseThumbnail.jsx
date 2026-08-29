@@ -7,6 +7,7 @@ import lec9th  from "../../assets/lec_9th.jpg";
 import lec10th from "../../assets/lec_10th.jpg";
 import lec11th from "../../assets/lec_11th.jpg";
 import lec12th from "../../assets/lec_12th.jpg";
+import sachinMaths from "../../assets/sachin_basic_maths.jpg";
 import defaultImg from "../../assets/img.jpg";
 
 /* ── Build clean URL from stored image path ─────────────────── */
@@ -34,7 +35,8 @@ const getCategoryTheme = (category = "", title = "") => {
   if (text.includes("12th"))    return { gradient: "linear-gradient(135deg, #172554 0%, #1e1b4b 100%)", accent: "#93c5fd", emoji: "🎓", label: "Class 12th"  };
   if (text.includes("mains") || text.includes("jee"))
                                 return { gradient: "linear-gradient(135deg, #991b1b 0%, #450a0a 100%)", accent: "#fca5a5", emoji: "🎯", label: "JEE Main"  };
-  if (text.includes("advanced"))return { gradient: "linear-gradient(135deg, #115e59 0%, #042f2e 100%)", accent: "#5eead4", emoji: "⚡", label: "JEE Advanced"  };
+  if (text.includes("advanced") || text.includes("basic"))
+                                return { gradient: "linear-gradient(135deg, #115e59 0%, #042f2e 100%)", accent: "#5eead4", emoji: "⚡", label: "JEE Advanced"  };
   if (text.includes("olympiad"))return { gradient: "linear-gradient(135deg, #c2410c 0%, #7c2d12 100%)", accent: "#fdba74", emoji: "🏆", label: "Olympiad"  };
   return                               { gradient: "linear-gradient(135deg, #172554 0%, #0f172a 100%)", accent: "#38bdf8", emoji: "📚", label: "Mathematics" };
 };
@@ -42,9 +44,10 @@ const getCategoryTheme = (category = "", title = "") => {
 /* ── Match Local Class Asset ───────────────────────────────── */
 const getLocalClassImage = (category = "", title = "") => {
   const text = (category + " " + title).toLowerCase();
+  if (text.includes("sachin") || text.includes("basic to advanced") || text.includes("basic maths") || text.includes("one shot")) return sachinMaths;
   if (text.includes("9th") || text.includes("class 9"))  return lec9th;
   if (text.includes("10th") || text.includes("class 10")) return lec10th;
-  if (text.includes("11th") || text.includes("class 11")) return lec11th;
+  if (text.includes("11th") || text.includes("class 11")) return sachinMaths;
   if (text.includes("12th") || text.includes("class 12")) return lec12th;
   return defaultImg;
 };
