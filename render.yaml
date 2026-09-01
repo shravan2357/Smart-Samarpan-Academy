@@ -1,6 +1,7 @@
 services:
+  # Backend Web Service
   - type: web
-    name: smart-samarpan-academy
+    name: smart-samarpan-academy-backend
     runtime: node
     rootDir: server
     buildCommand: npm install
@@ -12,3 +13,16 @@ services:
       name: uploads
       mountPath: /opt/render/project/src/uploads
       sizeGB: 1
+
+  # Frontend Static Site
+  - type: web
+    name: smart-samarpan-academy-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+

@@ -35,7 +35,7 @@ const app = express();
       credentials: true,
     }));
 
-    const port = process.env.PORT;
+    const port = process.env.PORT || 5175;
 
     app.get("/", (req, res) => {
       res.send("Server is working");
