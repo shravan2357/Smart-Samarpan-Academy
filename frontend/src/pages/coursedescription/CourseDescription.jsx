@@ -36,8 +36,8 @@ const CourseDescription = ({ user }) => {
       );
 
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY || "rzp_test_hu4uSc3Jfsnnnj",
-        amount: order.id,
+        key: import.meta.env.VITE_RAZORPAY_KEY,
+        amount: order.amount,
         currency: "INR",
         name: "Samarpan",
         description: "Learn with us",

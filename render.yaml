@@ -25,4 +25,7 @@ services:
       - type: rewrite
         source: /*
         destination: /index.html
+    envVars:
+      - key: VITE_SERVER
+        value: https://smart-samarpan-academy-backend.onrender.com
 
