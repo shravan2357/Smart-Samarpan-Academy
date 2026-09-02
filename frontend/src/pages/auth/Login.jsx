@@ -40,7 +40,8 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Google login error:", error);
-      toast.error(error.response?.data?.message || "An error occurred during Google login.");
+      const msg = error.response?.data?.message || (error.message ? `Network/Server Error: ${error.message}` : "An error occurred during Google login.");
+      toast.error(msg);
     }
   };
 

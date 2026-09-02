@@ -16,8 +16,8 @@ export const server =
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    {/* NEW: Wrap with GoogleOAuthProvider */}
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+    {/* Wrap with GoogleOAuthProvider */}
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || "1062715092783-h79kkhe4rdce6cg2qcoduqir56gktin2.apps.googleusercontent.com"}>
       <UserContextProvider>
         <CourseContextProvider>
           <App />

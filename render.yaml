@@ -28,4 +28,8 @@ services:
     envVars:
       - key: VITE_SERVER
         value: https://smart-samarpan-academy-backend.onrender.com
+      - key: VITE_GOOGLE_CLIENT_ID
+        value: 1062715092783-h79kkhe4rdce6cg2qcoduqir56gktin2.apps.googleusercontent.com
+      - key: VITE_RAZORPAY_KEY
+        value: rzp_test_hu4uSc3Jfsnnnj
 

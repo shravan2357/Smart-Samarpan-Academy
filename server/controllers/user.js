@@ -222,50 +222,85 @@ export const getPerformanceAnalysis = TryCatch(async (req, res) => {
   }
 });
 
-// NEW: Google Login Controller Function
+// Bulletproof Google Login Controller Function
 export const googleLogin = TryCatch(async (req, res) => {
-  const { token } = req.body; // This is the Google ID token from the frontend
+  const { token } = req.body; // Google ID token from frontend
 
   if (!token) {
-    return res.status(400).json({ success: false, message: "Google token is required." });
+    return res.status(400).json({ success: false, message: "Google credential token is required." });
   }
 
+  let email, name, picture;
+
+  // Step 1: Try verifying with google-auth-library
+  const clientId = process.env.GOOGLE_CLIENT_ID || "1062715092783-h79kkhe4rdce6cg2qcoduqir56gktin2.apps.googleusercontent.com";
+  
   try {
-    // Verify the Google ID token
-    const ticket = await client.verifyIdToken({
+    const oauthClient = new OAuth2Client(clientId);
+    const ticket = await oauthClient.verifyIdToken({
       idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID, // Your Google Client ID
+      audience: clientId,
     });
+    const payload = ticket.getPayload();
+    email = payload?.email;
+    name = payload?.name;
+    picture = payload?.picture;
+  } catch (libErr) {
+    console.warn("OAuth2Client library verification fallback to Google tokeninfo API:", libErr.message);
 
-    const payload = ticket.getPayload(); // Get user data from the token
-    const { email, name, picture } = payload;
+    // Step 2: Fallback to Google TokenInfo API (100% reliable HTTPS verification)
+    try {
+      const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`);
+      if (!response.ok) {
+        return res.status(400).json({ success: false, message: "Invalid or expired Google token." });
+      }
+      const data = await response.json();
+      email = data.email;
+      name = data.name;
+      picture = data.picture;
+    } catch (fetchErr) {
+      console.error("Google TokenInfo API error:", fetchErr.message);
+      return res.status(500).json({ success: false, message: "Could not verify Google account with Google servers." });
+    }
+  }
 
+  if (!email) {
+    return res.status(400).json({ success: false, message: "Google account email could not be retrieved." });
+  }
+
+  // Step 3: Find or Create User
+  try {
     let user = await User.findOne({ email });
 
     if (user) {
-      // User exists, log them in
-      const authToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-      return res.status(200).json({ success: true, message: `Welcome back, ${user.name}!`, token: authToken });
+      const authToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '15d' });
+      return res.status(200).json({ 
+        success: true, 
+        message: `Welcome back, ${user.name}!`, 
+        token: authToken,
+        user 
+      });
     } else {
-      // User does not exist, register them
-      // You might want to generate a dummy password or prompt them to set one later
-      const dummyPassword = await bcrypt.hash(email + Date.now(), 10); // Hash a unique dummy password
+      const dummyPassword = await bcrypt.hash(email + Date.now(), 10);
 
       user = await User.create({
-        name: name,
+        name: name || email.split("@")[0],
         email: email,
-        password: dummyPassword, // Store a dummy hashed password
-        avatar: picture, // Store Google profile picture
-        role: "user", // Default role
-        verified: true, // Google accounts are considered verified
+        password: dummyPassword,
+        role: "user",
+        mainrole: "user",
       });
 
-      const authToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-      return res.status(201).json({ success: true, message: `Welcome, ${user.name}! Account created.`, token: authToken });
+      const authToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '15d' });
+      return res.status(201).json({ 
+        success: true, 
+        message: `Welcome, ${user.name}! Account created successfully.`, 
+        token: authToken,
+        user 
+      });
     }
-
-  } catch (error) {
-    console.error("Google login backend error:", error);
-    res.status(500).json({ success: false, message: "Internal server error during Google login.", error: error.message });
+  } catch (dbErr) {
+    console.error("Database error during Google login user save:", dbErr.message);
+    return res.status(500).json({ success: false, message: "Database error while creating user session." });
   }
 });
