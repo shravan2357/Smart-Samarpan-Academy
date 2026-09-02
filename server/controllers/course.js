@@ -66,12 +66,18 @@ export const getMyCourses = TryCatch(async (req, res) => {
 
 export const checkout = TryCatch(async (req, res) => {
   const user = await User.findById(req.user._id);
+  if (!user) {
+    return res.status(404).json({ message: "User session not found. Please log in again." });
+  }
 
   const course = await Courses.findById(req.params.id);
+  if (!course) {
+    return res.status(404).json({ message: "Course not found." });
+  }
 
-  if (user.subscription.includes(course._id)) {
+  if (user.subscription && user.subscription.includes(course._id)) {
     return res.status(400).json({
-      message: "You already have this course",
+      message: "You already have this course in your account.",
     });
   }
 
@@ -80,12 +86,18 @@ export const checkout = TryCatch(async (req, res) => {
     currency: "INR",
   };
 
-  const order = await instance.orders.create(options);
-
-  res.status(201).json({
-    order,
-    course,
-  });
+  try {
+    const order = await instance.orders.create(options);
+    res.status(201).json({
+      order,
+      course,
+    });
+  } catch (err) {
+    console.error("Razorpay Order Creation Error:", err);
+    return res.status(500).json({
+      message: err.error?.description || err.message || "Razorpay payment initialization failed. Please verify Razorpay API keys on server.",
+    });
+  }
 });
 
 export const paymentVerification = TryCatch(async (req, res) => {

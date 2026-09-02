@@ -24,6 +24,11 @@ const CourseDescription = ({ user }) => {
 
   const checkoutHandler = async () => {
     const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please log in first to enroll in this course.");
+      navigate("/login");
+      return;
+    }
     setLoading(true);
 
     try {
@@ -35,12 +40,14 @@ const CourseDescription = ({ user }) => {
         }
       );
 
+      const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY || "rzp_test_hu4uSc3Jfsnnnj";
+
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY,
+        key: razorpayKey,
         amount: order.amount,
         currency: "INR",
-        name: "Samarpan",
-        description: "Learn with us",
+        name: "Samarpan Math Academy",
+        description: "Course Enrollment",
         order_id: order.id,
         handler: async function (response) {
           const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
@@ -58,11 +65,11 @@ const CourseDescription = ({ user }) => {
             await fetchUser();
             await fetchCourses();
             await fetchMyCourse();
-            toast.success(data.message);
+            toast.success(data.message || "Course Purchased Successfully!");
             setLoading(false);
             navigate(`/payment-success/${razorpay_payment_id}`);
           } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error.response?.data?.message || "Payment verification failed.");
             setLoading(false);
           }
         },
@@ -70,10 +77,24 @@ const CourseDescription = ({ user }) => {
           color: "#172554",
         },
       };
+
+      if (!window.Razorpay) {
+        toast.error("Razorpay payment gateway failed to load. Please check your internet connection.");
+        setLoading(false);
+        return;
+      }
+
       const razorpay = new window.Razorpay(options);
+      razorpay.on("payment.failed", function (response) {
+        toast.error(response.error?.description || "Payment failed.");
+        setLoading(false);
+      });
       razorpay.open();
+      setLoading(false);
     } catch (error) {
-      toast.error(error.response?.data?.message || "An unexpected error occurred.");
+      console.error("Checkout error:", error);
+      const msg = error.response?.data?.message || (error.message ? `Payment Error: ${error.message}` : "An unexpected error occurred.");
+      toast.error(msg);
       setLoading(false);
     }
   };
