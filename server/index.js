@@ -14,8 +14,8 @@ import adminRoutes from "./routes/admin.js";
 dotenv.config();
 
 export const instance = new Razorpay({
-  key_id: process.env.Razorpay_Key,
-  key_secret: process.env.Razorpay_Secret,
+  key_id: (process.env.Razorpay_Key || "").trim().replace(/^["']|["']$/g, ''),
+  key_secret: (process.env.Razorpay_Secret || "").trim().replace(/^["']|["']$/g, ''),
 });
 
 const app = express();
