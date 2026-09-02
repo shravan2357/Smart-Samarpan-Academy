@@ -99,7 +99,7 @@ export const sendForgotMail = async (subject, data) => {
   <div class="container">
     <h1>Reset Password Request</h1>
     <p>We received a request to reset your password. Click the button below to proceed:</p>
-    <a href="${process.env.frontendurl || 'https://smart-samarpan-academy.vercel.app'}/reset-password/${data.token}" class="button">Reset Password</a>
+    <a href="${(process.env.frontendurl || 'http://localhost:5173').replace(/\/$/, '')}/reset-password/${data.token}" class="button">Reset Password</a>
     <p>If you didn't request this, you can safely ignore this email.</p>
   </div>
 </body>

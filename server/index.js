@@ -22,13 +22,11 @@ const app = express();
 
     app.use(express.json());
 
-    // NEW: Explicit CORS configuration for Vercel & Render deployment
+    // CORS configuration for local development and deployed frontend
     const allowedOrigins = [
       "http://localhost:5173", // For local development
-      process.env.frontendurl, // Your deployed Vercel frontend URL (will be set in Render env vars)
-      "https://smart-samarpan-academy.onrender.com", // Live Render backend URL
-      // Add any other specific origins if you have them
-    ];
+      process.env.frontendurl, // Deployed frontend URL from environment variable
+    ].filter(Boolean);
 
     app.use(cors({
       origin: (origin, callback) => callback(null, true),
