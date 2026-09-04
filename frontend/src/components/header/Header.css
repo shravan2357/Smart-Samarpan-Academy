@@ -1,6 +1,7 @@
-/* ================================================================
+/* =============================================================
    Header Component — Modern Academic & Trustworthy Education Theme
-   ================================================================ */
+   Optimized for Mobile, Tablet, and Desktop
+   ============================================================= */
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
 .hdr-main {
@@ -12,7 +13,7 @@
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(229, 225, 216, 0.85);
   box-shadow: 0 2px 10px rgba(23, 37, 84, 0.03);
-  font-family: "Plus Jakarta Sans", "Inter", sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
   transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
               background 0.3s ease,
               box-shadow 0.3s ease,
@@ -31,7 +32,7 @@
 .hdr-container {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 14px 24px;
+  padding: 12px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -39,7 +40,7 @@
 }
 
 .hdr-main.scrolled .hdr-container {
-  padding: 10px 24px;
+  padding: 10px 20px;
 }
 
 /* Logo */
@@ -57,8 +58,8 @@
 }
 
 .hdr-logo-img {
-  height: 44px;
-  width: 44px;
+  height: 42px;
+  width: 42px;
   border-radius: 50%;
   border: 2px solid #0f766e;
   box-shadow: 0 2px 8px rgba(15, 118, 110, 0.15);
@@ -67,12 +68,12 @@
 }
 
 .hdr-main.scrolled .hdr-logo-img {
-  height: 40px;
-  width: 40px;
+  height: 38px;
+  width: 38px;
 }
 
 .hdr-brand-name {
-  font-size: 1.28rem;
+  font-size: 1.25rem;
   font-weight: 800;
   color: #172554; /* Academic Navy */
   letter-spacing: -0.02em;
@@ -80,24 +81,24 @@
 }
 
 .hdr-main.scrolled .hdr-brand-name {
-  font-size: 1.22rem;
+  font-size: 1.18rem;
 }
 
-/* Desktop Nav */
+/* Desktop Nav (shown on screens 1025px and wider) */
 .hdr-nav {
   display: none;
   align-items: center;
-  gap: 28px;
+  gap: 26px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1025px) {
   .hdr-nav {
     display: flex;
   }
 }
 
 .hdr-link {
-  font-size: 0.98rem;
+  font-size: 0.96em;
   font-weight: 600;
   color: #374151; /* Dark Slate / Charcoal */
   text-decoration: none;
@@ -109,12 +110,13 @@
   padding: 6px 2px;
 }
 
-.hdr-link:hover {
-  color: #0f766e; /* Teal secondary */
+.hdr-link:hover,
+.hdr-link.active {
+  color: #0f766e; /* Deep Teal */
 }
 
 .hdr-link::after {
-  content: "";
+  content: '';
   position: absolute;
   bottom: 0;
   left: 0;
@@ -127,7 +129,8 @@
   transition: transform 0.25s ease;
 }
 
-.hdr-link:hover::after {
+.hdr-link:hover::after,
+.hdr-link.active::after {
   transform: scaleX(1);
   transform-origin: left;
 }
@@ -153,7 +156,7 @@
   color: #ffffff;
   padding: 9px 24px;
   border-radius: 8px;
-  font-size: 0.95rem;
+  font-size: 0.95em;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.2s ease;
@@ -170,13 +173,13 @@
   box-shadow: 0 4px 14px rgba(23, 37, 84, 0.2);
 }
 
-/* Mobile Menu Button */
+/* Mobile / Tablet Menu Button (shown below 1025px) */
 .hdr-mobile-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   background: #ffffff;
-  border: 1px solid #d1d5db;
+  border: 1px solid #d1d5$b;
   color: #172554;
   padding: 8px;
   border-radius: 10px;
@@ -185,14 +188,15 @@
   outline: none;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1025px) {
   .hdr-mobile-btn {
     display: none;
   }
 }
 
-.hdr-mobile-btn:hover {
-  background: #f3f4f6;
+.hdr-mobile-btn:hover,
+.hdr-mobile-btn:active {
+  background: #f0fdfa;
   border-color: #0f766e;
   color: #0f766e;
 }
@@ -201,40 +205,48 @@
   font-size: 24px;
 }
 
-/* Mobile Drawer Overlay Backdrop */
+/* Mobile / Tablet Drawer Overlay Backdrop */
 .hdr-mobile-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.55);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  z-index: 1000;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 9999;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hdr-mobile-overlay.open {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
-/* Mobile Drawer */
+/* Mobile / Tablet Slide-out Drawer */
 .hdr-mobile-drawer {
   position: fixed;
   top: 0;
   right: 0;
-  width: min(85vw, 320px);
+  width: min(86vw, 340px);
   height: 100vh;
+  height: 100dvh;
   background: #ffffff;
-  z-index: 1001;
+  z-index: 10000;
   display: flex;
   flex-direction: column;
-  padding: 20px 22px 30px;
-  box-shadow: -8px 0 28px rgba(0, 0, 0, 0.16);
+  padding: 20px 20px calc(24px + env(safe-area-inset-bottom, 0px));
+  box-shadow: -10px 0 35px rgba(0, 0, 0, 0.22);
   transform: translateX(100%);
   transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .hdr-mobile-drawer.open {
@@ -245,9 +257,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 18px;
-  border-bottom: 1px solid #e5e1d8;
-  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f0ea;
+  margin-bottom: 16px;
 }
 
 .hdr-mobile-drawer-brand {
@@ -257,25 +269,39 @@
 }
 
 .hdr-drawer-logo-img {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 2px solid #0f766e;
   object-fit: cover;
 }
 
+.hdr-drawer-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
 .hdr-drawer-brand-name {
-  font-size: 1.1rem;
+  font-size: 1.08rem;
   font-weight: 800;
   color: #172554;
+  line-height: 1.2;
+}
+
+.hdr-drawer-brand-sub {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #0f766e;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .hdr-mobile-drawer-close {
   background: #f4f2eb;
   border: none;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -285,16 +311,65 @@
   transition: all 0.2s ease;
 }
 
-.hdr-mobile-drawer-close:hover {
+.hdr-mobile-drawer-close:hover,
+.hdr-mobile-drawer-close:active {
   background: #fee2e2;
   color: #dc2626;
+}
+
+/* User Card in Drawer */
+.hdr-drawer-user-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.hdr-drawer-user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #172554;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.hdr-drawer-user-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.hdr-drawer-user-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hdr-drawer-user-email {
+  font-size: 0.76rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Mobile Links */
 .hdr-mobile-menu-links {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   flex: 1;
 }
 
@@ -303,20 +378,51 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px 14px;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #1f2937;
+  border-radius: 12px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #334155;
   text-decoration: none;
   background: transparent;
   transition: all 0.2s ease;
 }
 
+.hdr-mobile-link-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hdr-link-icon {
+  font-size: 20px;
+  color: #64748b;
+  transition: color 0.2s ease;
+}
+
+.hdr-link-icon.ai {
+  color: #d97706;
+}
+
 .hdr-mobile-link:hover,
 .hdr-mobile-link:active {
-  background: #f4f2eb;
+  background: #f8f7f2;
   color: #0f766e;
-  transform: translateX(4px);
+  transform: translateX(3px);
+}
+
+.hdr-mobile-link:hover .hdr-link-icon,
+.hdr-mobile-link:active .hdr-link-icon {
+  color: #0f766e;
+}
+
+.hdr-mobile-link.active {
+  background: rgba(15, 118, 110, 0.08);
+  color: #0f766e;
+  font-weight: 700;
+}
+
+.hdr-mobile-link.active .hdr-link-icon {
+  color: #0f766e;
 }
 
 .hdr-mobile-link.adm {
@@ -329,22 +435,27 @@
   background: #dcfce7;
 }
 
+/* Drawer Footer */
 .hdr-mobile-auth-wrap {
   margin-top: auto;
-  padding-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid #f1f0ea;
 }
 
 .hdr-mobile-btn-login {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   text-align: center;
   background: #172554;
   color: #ffffff;
   padding: 13px 20px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.98rem;
   text-decoration: none;
-  box-shadow: 0 4px 12px rgba(23, 37, 84, 0.15);
+  box-shadow: 0 4px 14px rgba(23, 37, 84, 0.16);
   transition: all 0.2s ease;
 }
 
@@ -353,3 +464,32 @@
   color: #ffffff;
 }
 
+.hdr-login-icon {
+  font-size: 19px;
+}
+
+.hdr-mobile-btn-logout {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hdr-mobile-btn-logout:hover {
+  background: #fecaca;
+  color: #b91c1c;
+}
+
+.hdr-logout-icon {
+  font-size: 18px;
+}

@@ -73,20 +73,34 @@ const CourseDescription = ({ user }) => {
             setLoading(false);
           }
         },
+        prefill: {
+          name: user?.name || "",
+          email: user?.email || "",
+          contact: "",
+        },
         theme: {
           color: "#172554",
+        },
+        modal: {
+          ondismiss: function () {
+            setLoading(false);
+          },
         },
       };
 
       if (!window.Razorpay) {
-        toast.error("Razorpay payment gateway failed to load. Please check your internet connection.");
+        toast.error("Razorpay payment gateway failed to load. Please disable any AdBlocker / Brave Shields and try again.", {
+          duration: 6000,
+        });
         setLoading(false);
         return;
       }
 
       const razorpay = new window.Razorpay(options);
       razorpay.on("payment.failed", function (response) {
-        toast.error(response.error?.description || "Payment failed.");
+        console.error("Payment failure response:", response.error);
+        const errDesc = response.error?.description || response.error?.reason || "Payment process failed.";
+        toast.error(errDesc);
         setLoading(false);
       });
       razorpay.open();

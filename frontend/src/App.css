@@ -11,6 +11,12 @@
       color: #1f2937;
     }
 
+    @media (max-width: 1024px) {
+      body {
+        padding-bottom: 68px;
+      }
+    }
+
     .common-btn {
       background-color: #172554;
       color: white;

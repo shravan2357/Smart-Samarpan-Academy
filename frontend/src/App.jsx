@@ -8,6 +8,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Verify from "./pages/auth/Verify";
 import Footer from "./components/footer/Footer";
+import MobileTabBar from "./components/mobilenav/MobileTabBar";
 import About from "./pages/about/About";
 import Account from "./pages/account/Account";
 import { UserData } from "./context/UserContext";
@@ -109,6 +110,7 @@ const App = () => {
             />
           </Routes>
           <Footer />
+          <MobileTabBar />
         </BrowserRouter>
       )}
     </>
