@@ -123,9 +123,8 @@ export const forgotPassword = TryCatch(async (req, res) => {
     res.json({ message: "Reset Password Link is send to you mail" });
   } catch (error) {
     console.error("Error sending forgot password email:", error.message);
-    console.log(`[TESTING ON RENDER] Reset token for ${email} is ${token}`);
     return res.status(500).json({ 
-      message: "Email sending failed (Render free tier blocks SMTP port 465). Check server logs for your reset token." 
+      message: "Failed to send reset password email. Please check your email address and try again." 
     });
   }
 });

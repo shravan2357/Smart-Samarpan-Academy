@@ -1,7 +1,8 @@
 import { createTransport } from "nodemailer";
+import nodemailer from "nodemailer";
 
 // Helper: create the right transporter
-// Priority: 1. Brevo SMTP (works on Render) → 2. Gmail SMTP (local dev only)
+// Priority: 1. Brevo SMTP → 2. Gmail App Password → 3. Ethereal (auto local dev fallback)
 const createMailTransport = () => {
   if (process.env.BREVO_USER && process.env.BREVO_PASS) {
     // Brevo (Sendinblue) SMTP — works on Render free tier, no domain needed
@@ -16,16 +17,23 @@ const createMailTransport = () => {
     });
   }
 
-  // Fallback: Gmail SMTP (local development only — blocked on Render)
-  return createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.Gmail,
-      pass: process.env.Password,
-    },
-  });
+  // Gmail SMTP — requires App Password
+  const gmailUser = (process.env.Gmail || "").trim();
+  const gmailPass = (process.env.Password || "").replace(/\s+/g, "");
+  if (gmailUser && gmailPass) {
+    return createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: gmailUser,
+        pass: gmailPass,
+      },
+    });
+  }
+
+  // Fallback: return null — caller will use Ethereal test account
+  return null;
 };
 
 // =============================================
@@ -64,15 +72,51 @@ const sendMail = async (email, subject, data) => {
 </body>
 </html>`;
 
-  const transport = createMailTransport();
-  const fromEmail = process.env.BREVO_USER || process.env.Gmail;
+  let transport = createMailTransport();
 
-  return await transport.sendMail({
+  // If no real SMTP configured — use Ethereal free test email (auto-provisioned)
+  if (!transport) {
+    console.log("\n⚠️  No real SMTP configured. Using Ethereal test email...");
+    const testAccount = await nodemailer.createTestAccount();
+    transport = createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
+      secure: false,
+      auth: {
+        user: testAccount.user,
+        pass: testAccount.pass,
+      },
+    });
+
+    const fromEmail = testAccount.user;
+    const info = await transport.sendMail({
+      from: `"Samarpan Math Academy" <${fromEmail}>`,
+      to: email,
+      subject,
+      html,
+    });
+
+    // Always log OTP to console as a backup during local dev
+    console.log("\n" + "=".repeat(60));
+    console.log(`📧  OTP EMAIL SENT (Local Dev Mode)`);
+    console.log(`   To: ${email}`);
+    console.log(`   OTP: ${data.otp}`);
+    console.log(`   Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+    console.log("=".repeat(60) + "\n");
+    return info;
+  }
+
+  const fromEmail = process.env.BREVO_USER || process.env.Gmail;
+  const info = await transport.sendMail({
     from: `"Samarpan Math Academy" <${fromEmail}>`,
     to: email,
     subject,
     html,
   });
+
+  // Log confirmation without exposing secret OTP in logs
+  console.log(`\n📧  Verification OTP email sent successfully to: ${email}\n`);
+  return info;
 };
 
 export default sendMail;
@@ -105,9 +149,40 @@ export const sendForgotMail = async (subject, data) => {
 </body>
 </html>`;
 
-  const transport = createMailTransport();
-  const fromEmail = process.env.BREVO_USER || process.env.Gmail;
+  let transport = createMailTransport();
 
+  if (!transport) {
+    console.log("\n⚠️  No real SMTP configured. Using Ethereal test email for reset link...");
+    const testAccount = await nodemailer.createTestAccount();
+    transport = createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
+      secure: false,
+      auth: {
+        user: testAccount.user,
+        pass: testAccount.pass,
+      },
+    });
+
+    const fromEmail = testAccount.user;
+    const info = await transport.sendMail({
+      from: `"Samarpan Math Academy" <${fromEmail}>`,
+      to: data.email,
+      subject,
+      html,
+    });
+
+    const resetUrl = `${(process.env.frontendurl || 'http://localhost:5173').replace(/\/$/, '')}/reset-password/${data.token}`;
+    console.log("\n" + "=".repeat(60));
+    console.log(`🔑  PASSWORD RESET EMAIL (Local Dev Mode)`);
+    console.log(`   To: ${data.email}`);
+    console.log(`   Reset URL: ${resetUrl}`);
+    console.log(`   Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+    console.log("=".repeat(60) + "\n");
+    return info;
+  }
+
+  const fromEmail = process.env.BREVO_USER || process.env.Gmail;
   return await transport.sendMail({
     from: `"Samarpan Math Academy" <${fromEmail}>`,
     to: data.email,

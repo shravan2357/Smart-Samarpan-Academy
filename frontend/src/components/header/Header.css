@@ -7,13 +7,25 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(248, 247, 242, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid #e5e1d8;
-  box-shadow: 0 2px 12px rgba(23, 37, 84, 0.04);
+  background: rgba(248, 247, 242, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(229, 225, 216, 0.85);
+  box-shadow: 0 2px 10px rgba(23, 37, 84, 0.03);
   font-family: "Plus Jakarta Sans", "Inter", sans-serif;
-  transition: all 0.3s ease;
+  transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              background 0.3s ease,
+              box-shadow 0.3s ease,
+              border-color 0.3s ease;
+}
+
+/* Scrolled state: slightly compact, enhanced elevation & glassmorphism */
+.hdr-main.scrolled {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom-color: rgba(229, 225, 216, 0.95);
+  box-shadow: 0 4px 20px rgba(23, 37, 84, 0.08);
 }
 
 .hdr-container {
@@ -23,6 +35,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hdr-main.scrolled .hdr-container {
+  padding: 10px 24px;
 }
 
 /* Logo */
@@ -32,6 +49,7 @@
   gap: 12px;
   text-decoration: none;
   transition: transform 0.2s ease;
+  user-select: none;
 }
 
 .hdr-logo-link:hover {
@@ -39,19 +57,30 @@
 }
 
 .hdr-logo-img {
-  height: 48px;
-  width: 48px;
+  height: 44px;
+  width: 44px;
   border-radius: 50%;
   border: 2px solid #0f766e;
   box-shadow: 0 2px 8px rgba(15, 118, 110, 0.15);
   object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.hdr-main.scrolled .hdr-logo-img {
+  height: 40px;
+  width: 40px;
 }
 
 .hdr-brand-name {
-  font-size: 1.35rem;
+  font-size: 1.28rem;
   font-weight: 800;
   color: #172554; /* Academic Navy */
   letter-spacing: -0.02em;
+  transition: font-size 0.3s ease;
+}
+
+.hdr-main.scrolled .hdr-brand-name {
+  font-size: 1.22rem;
 }
 
 /* Desktop Nav */
@@ -114,6 +143,8 @@
   border-radius: 6px;
   letter-spacing: 0.02em;
   margin-left: 2px;
+  display: inline-flex;
+  align-items: center;
 }
 
 /* Login Button */
@@ -129,6 +160,7 @@
   box-shadow: 0 2px 8px rgba(23, 37, 84, 0.12);
   border: 1px solid transparent;
   cursor: pointer;
+  display: inline-block;
 }
 
 .hdr-btn-login:hover {
@@ -140,14 +172,17 @@
 
 /* Mobile Menu Button */
 .hdr-mobile-btn {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #ffffff;
   border: 1px solid #d1d5db;
   color: #172554;
   padding: 8px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
+  outline: none;
 }
 
 @media (min-width: 768px) {
@@ -160,5 +195,161 @@
   background: #f3f4f6;
   border-color: #0f766e;
   color: #0f766e;
+}
+
+.hdr-mobile-icon {
+  font-size: 24px;
+}
+
+/* Mobile Drawer Overlay Backdrop */
+.hdr-mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.hdr-mobile-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Mobile Drawer */
+.hdr-mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(85vw, 320px);
+  height: 100vh;
+  background: #ffffff;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 22px 30px;
+  box-shadow: -8px 0 28px rgba(0, 0, 0, 0.16);
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+}
+
+.hdr-mobile-drawer.open {
+  transform: translateX(0);
+}
+
+.hdr-mobile-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #e5e1d8;
+  margin-bottom: 20px;
+}
+
+.hdr-mobile-drawer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hdr-drawer-logo-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #0f766e;
+  object-fit: cover;
+}
+
+.hdr-drawer-brand-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #172554;
+}
+
+.hdr-mobile-drawer-close {
+  background: #f4f2eb;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hdr-mobile-drawer-close:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Mobile Links */
+.hdr-mobile-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.hdr-mobile-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1f2937;
+  text-decoration: none;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.hdr-mobile-link:hover,
+.hdr-mobile-link:active {
+  background: #f4f2eb;
+  color: #0f766e;
+  transform: translateX(4px);
+}
+
+.hdr-mobile-link.adm {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.hdr-mobile-link.adm:hover {
+  background: #dcfce7;
+}
+
+.hdr-mobile-auth-wrap {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.hdr-mobile-btn-login {
+  display: block;
+  text-align: center;
+  background: #172554;
+  color: #ffffff;
+  padding: 13px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(23, 37, 84, 0.15);
+  transition: all 0.2s ease;
+}
+
+.hdr-mobile-btn-login:hover {
+  background: #1e3a8a;
+  color: #ffffff;
 }
 
